@@ -1,0 +1,6 @@
+framework module KMPlaceholderTextView {
+  umbrella header "Pods-KMPlaceholderTextView-umbrella.h"
+
+  export *
+  module * { export * }
+}

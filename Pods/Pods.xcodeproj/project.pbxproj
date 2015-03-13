@@ -1,0 +1,507 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2023C7C141597DA5DCEDA3C7 /* Pods-KMPlaceholderTextView-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 85A60ED0CC9FC9D09E63ED61 /* Pods-KMPlaceholderTextView-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		31347EF00A272F38D170E1C3 /* Pods-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DDDE5EAB44FAA0C2A28FBEEE /* Pods-dummy.m */; };
+		517971ED2CE912BDD9A5F055 /* Pods-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = AB350E81E9A5DD76B6A041B9 /* Pods-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CC3351C63E4C4B55DD4398B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B365E14341FA4D8A825B06 /* UIKit.framework */; };
+		C52ED584258160E287C40FE1 /* KMPlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A294A03F1DF0C114E6005C /* KMPlaceholderTextView.swift */; };
+		D93018373D1BA9790D37CD9C /* Pods-KMPlaceholderTextView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A553787E96704BD4A5A3789 /* Pods-KMPlaceholderTextView-dummy.m */; };
+		DA33D57B6BA776B6E7C04980 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDE50AC189EC7654BB539B1E /* Foundation.framework */; };
+		DFAD5D7C0E447C93D357014E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDE50AC189EC7654BB539B1E /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D6E816A0CB467B57BD02D807 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92DD54874025564ED449CE18 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9461E72ED271ECEEA3E05EC2;
+			remoteInfo = "Pods-KMPlaceholderTextView";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		18B365E14341FA4D8A825B06 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		2192FE69FBBB95716411AEDE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		29BB0F53F255EDFF5054E74B /* Pods-KMPlaceholderTextView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-KMPlaceholderTextView-prefix.pch"; sourceTree = "<group>"; };
+		3A5C9E32CBF4F91761353676 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C779D256D77C9304BEC3F7F /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.release.xcconfig; sourceTree = "<group>"; };
+		4047AC2492433C8040754DAE /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		40E2886832DC61DF047EAE2F /* Pods-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-acknowledgements.markdown"; sourceTree = "<group>"; };
+		49D0F17CCF8F67FF7B716D9E /* KMPlaceholderTextView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KMPlaceholderTextView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		59813C6B4D122F1B6BF9CCD5 /* Pods-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-environment.h"; sourceTree = "<group>"; };
+		78A294A03F1DF0C114E6005C /* KMPlaceholderTextView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KMPlaceholderTextView.swift; path = KMPlaceholderTextView/KMPlaceholderTextView.swift; sourceTree = "<group>"; };
+		78FAC35C420128C00A2B8793 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.debug.xcconfig; sourceTree = "<group>"; };
+		7A553787E96704BD4A5A3789 /* Pods-KMPlaceholderTextView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-KMPlaceholderTextView-dummy.m"; sourceTree = "<group>"; };
+		85A60ED0CC9FC9D09E63ED61 /* Pods-KMPlaceholderTextView-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-KMPlaceholderTextView-umbrella.h"; sourceTree = "<group>"; };
+		8B826230F3B0D3A959A2EC4D /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
+		8EACBA5B2C91A9D2F84F6885 /* Pods.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Pods.modulemap; sourceTree = "<group>"; };
+		A33F3E7CC985E0A1D1D54413 /* Pods-KMPlaceholderTextView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-KMPlaceholderTextView.xcconfig"; sourceTree = "<group>"; };
+		AB350E81E9A5DD76B6A041B9 /* Pods-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-umbrella.h"; sourceTree = "<group>"; };
+		B19CB2966E64D3E95AF49B0C /* Pods-KMPlaceholderTextView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-KMPlaceholderTextView.modulemap"; sourceTree = "<group>"; };
+		C1BB8E570179812D3E12459F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D2DFBE97576341EA7C1AD987 /* Pods-KMPlaceholderTextView-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-KMPlaceholderTextView-Private.xcconfig"; sourceTree = "<group>"; };
+		DDDE5EAB44FAA0C2A28FBEEE /* Pods-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-dummy.m"; sourceTree = "<group>"; };
+		DDE50AC189EC7654BB539B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		E0766D06E01B4E4231DF5ABC /* Pods-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-frameworks.sh"; sourceTree = "<group>"; };
+		F065C4633561B79C795A17D7 /* Pods-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-resources.sh"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8420A0AD38EDF201C03AA1B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA33D57B6BA776B6E7C04980 /* Foundation.framework in Frameworks */,
+				8CC3351C63E4C4B55DD4398B /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4A7668073DB5BF69BACC9DE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DFAD5D7C0E447C93D357014E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		02B776B95FC870E258A578C7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2192FE69FBBB95716411AEDE /* Info.plist */,
+				8EACBA5B2C91A9D2F84F6885 /* Pods.modulemap */,
+				40E2886832DC61DF047EAE2F /* Pods-acknowledgements.markdown */,
+				8B826230F3B0D3A959A2EC4D /* Pods-acknowledgements.plist */,
+				DDDE5EAB44FAA0C2A28FBEEE /* Pods-dummy.m */,
+				59813C6B4D122F1B6BF9CCD5 /* Pods-environment.h */,
+				E0766D06E01B4E4231DF5ABC /* Pods-frameworks.sh */,
+				F065C4633561B79C795A17D7 /* Pods-resources.sh */,
+				AB350E81E9A5DD76B6A041B9 /* Pods-umbrella.h */,
+				78FAC35C420128C00A2B8793 /* Pods.debug.xcconfig */,
+				3C779D256D77C9304BEC3F7F /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			path = "Target Support Files/Pods";
+			sourceTree = "<group>";
+		};
+		205499E956064B1ED704FF4F /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C1BB8E570179812D3E12459F /* Info.plist */,
+				B19CB2966E64D3E95AF49B0C /* Pods-KMPlaceholderTextView.modulemap */,
+				A33F3E7CC985E0A1D1D54413 /* Pods-KMPlaceholderTextView.xcconfig */,
+				D2DFBE97576341EA7C1AD987 /* Pods-KMPlaceholderTextView-Private.xcconfig */,
+				7A553787E96704BD4A5A3789 /* Pods-KMPlaceholderTextView-dummy.m */,
+				29BB0F53F255EDFF5054E74B /* Pods-KMPlaceholderTextView-prefix.pch */,
+				85A60ED0CC9FC9D09E63ED61 /* Pods-KMPlaceholderTextView-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-KMPlaceholderTextView";
+			sourceTree = "<group>";
+		};
+		482C83B1C6C4EC3D279BE791 = {
+			isa = PBXGroup;
+			children = (
+				4047AC2492433C8040754DAE /* Podfile */,
+				5ED9CA1856B410E87FA2A82B /* Frameworks */,
+				D2DCE7141C1C6B6CF64C079B /* Pods */,
+				C386EC6656E477033B76D87D /* Products */,
+				847006A8338FE2BCE4B22347 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		522B18446BBBA42F19200BE4 /* KMPlaceholderTextView */ = {
+			isa = PBXGroup;
+			children = (
+				78A294A03F1DF0C114E6005C /* KMPlaceholderTextView.swift */,
+				205499E956064B1ED704FF4F /* Support Files */,
+			);
+			path = KMPlaceholderTextView;
+			sourceTree = "<group>";
+		};
+		5ED9CA1856B410E87FA2A82B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				820B294C72D0045B742BDFEE /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		820B294C72D0045B742BDFEE /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				DDE50AC189EC7654BB539B1E /* Foundation.framework */,
+				18B365E14341FA4D8A825B06 /* UIKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		847006A8338FE2BCE4B22347 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				02B776B95FC870E258A578C7 /* Pods */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		C386EC6656E477033B76D87D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49D0F17CCF8F67FF7B716D9E /* KMPlaceholderTextView.framework */,
+				3A5C9E32CBF4F91761353676 /* Pods.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D2DCE7141C1C6B6CF64C079B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				522B18446BBBA42F19200BE4 /* KMPlaceholderTextView */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		100439C3DC3C2465A1D0938A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2023C7C141597DA5DCEDA3C7 /* Pods-KMPlaceholderTextView-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C65A80DC05A2C57B4C2CB5B4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				517971ED2CE912BDD9A5F055 /* Pods-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		112A3D0C5E135ABC71BC923E /* Pods */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1C2FCDFDB301C198113B7CF /* Build configuration list for PBXNativeTarget "Pods" */;
+			buildPhases = (
+				3C3156645A9C7FD923A6A1CD /* Sources */,
+				C4A7668073DB5BF69BACC9DE /* Frameworks */,
+				C65A80DC05A2C57B4C2CB5B4 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B6BDA6C95E269C772EDA456 /* PBXTargetDependency */,
+			);
+			name = Pods;
+			productName = Pods;
+			productReference = 3A5C9E32CBF4F91761353676 /* Pods.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9461E72ED271ECEEA3E05EC2 /* Pods-KMPlaceholderTextView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB5391488EC30E71714C5061 /* Build configuration list for PBXNativeTarget "Pods-KMPlaceholderTextView" */;
+			buildPhases = (
+				63A1B813AD87189180332709 /* Sources */,
+				8420A0AD38EDF201C03AA1B5 /* Frameworks */,
+				100439C3DC3C2465A1D0938A /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-KMPlaceholderTextView";
+			productName = "Pods-KMPlaceholderTextView";
+			productReference = 49D0F17CCF8F67FF7B716D9E /* KMPlaceholderTextView.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		92DD54874025564ED449CE18 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = 57F573D8DA48FDA3126E43D7 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 482C83B1C6C4EC3D279BE791;
+			productRefGroup = C386EC6656E477033B76D87D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				112A3D0C5E135ABC71BC923E /* Pods */,
+				9461E72ED271ECEEA3E05EC2 /* Pods-KMPlaceholderTextView */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3C3156645A9C7FD923A6A1CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				31347EF00A272F38D170E1C3 /* Pods-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63A1B813AD87189180332709 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C52ED584258160E287C40FE1 /* KMPlaceholderTextView.swift in Sources */,
+				D93018373D1BA9790D37CD9C /* Pods-KMPlaceholderTextView-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2B6BDA6C95E269C772EDA456 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-KMPlaceholderTextView";
+			target = 9461E72ED271ECEEA3E05EC2 /* Pods-KMPlaceholderTextView */;
+			targetProxy = D6E816A0CB467B57BD02D807 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00DA933EE2F25E5118D72901 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 78FAC35C420128C00A2B8793 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods/Pods.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		0A82B653BFBABF4DEF9B7855 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C779D256D77C9304BEC3F7F /* Pods.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods/Pods.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		19459A1E03B1FE2FBA114224 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		246B8135BBC6294B2568465E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		79AB4F1E50F420B2D85A202F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2DFBE97576341EA7C1AD987 /* Pods-KMPlaceholderTextView-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-KMPlaceholderTextView/Pods-KMPlaceholderTextView-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-KMPlaceholderTextView/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-KMPlaceholderTextView/Pods-KMPlaceholderTextView.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = KMPlaceholderTextView;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FEF6A622B9F7815D2EC99D45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2DFBE97576341EA7C1AD987 /* Pods-KMPlaceholderTextView-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-KMPlaceholderTextView/Pods-KMPlaceholderTextView-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-KMPlaceholderTextView/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-KMPlaceholderTextView/Pods-KMPlaceholderTextView.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = KMPlaceholderTextView;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		57F573D8DA48FDA3126E43D7 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19459A1E03B1FE2FBA114224 /* Debug */,
+				246B8135BBC6294B2568465E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C1C2FCDFDB301C198113B7CF /* Build configuration list for PBXNativeTarget "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00DA933EE2F25E5118D72901 /* Debug */,
+				0A82B653BFBABF4DEF9B7855 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB5391488EC30E71714C5061 /* Build configuration list for PBXNativeTarget "Pods-KMPlaceholderTextView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FEF6A622B9F7815D2EC99D45 /* Debug */,
+				79AB4F1E50F420B2D85A202F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 92DD54874025564ED449CE18 /* Project object */;
+}

@@ -1,0 +1,628 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CD1273B51AA7EB5F00D9D393 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273B41AA7EB5F00D9D393 /* AppDelegate.swift */; };
+		CD1273BA1AA7EB5F00D9D393 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD1273B81AA7EB5F00D9D393 /* Main.storyboard */; };
+		CD1273BC1AA7EB5F00D9D393 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD1273BB1AA7EB5F00D9D393 /* Images.xcassets */; };
+		CD1273BF1AA7EB5F00D9D393 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1273BD1AA7EB5F00D9D393 /* LaunchScreen.xib */; };
+		CD1273CB1AA7EB5F00D9D393 /* VoiceMemosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273CA1AA7EB5F00D9D393 /* VoiceMemosTests.swift */; };
+		CD1273DC1AA7EBDC00D9D393 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273D51AA7EBDC00D9D393 /* BaseTableViewController.swift */; };
+		CD1273DD1AA7EBDC00D9D393 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273D61AA7EBDC00D9D393 /* DetailViewController.swift */; };
+		CD1273DE1AA7EBDC00D9D393 /* NoVoiceSelectedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273D71AA7EBDC00D9D393 /* NoVoiceSelectedViewController.swift */; };
+		CD1273DF1AA7EBDC00D9D393 /* RecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273D81AA7EBDC00D9D393 /* RecordViewController.swift */; };
+		CD1273E01AA7EBDC00D9D393 /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273D91AA7EBDC00D9D393 /* SplitViewController.swift */; };
+		CD1273E11AA7EBDC00D9D393 /* VoiceSearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273DA1AA7EBDC00D9D393 /* VoiceSearchResultsController.swift */; };
+		CD1273E21AA7EBDC00D9D393 /* VoicesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273DB1AA7EBDC00D9D393 /* VoicesTableViewController.swift */; };
+		CD1273E91AA7EBE300D9D393 /* KMCircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273E41AA7EBE300D9D393 /* KMCircularProgressView.swift */; };
+		CD1273EB1AA7EBE300D9D393 /* KMVoiceRecordHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273E61AA7EBE300D9D393 /* KMVoiceRecordHUD.swift */; };
+		CD1273EC1AA7EBE300D9D393 /* VoiceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273E71AA7EBE300D9D393 /* VoiceTableViewCell.swift */; };
+		CD1273ED1AA7EBE300D9D393 /* VoiceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1273E81AA7EBE300D9D393 /* VoiceTableViewCell.xib */; };
+		CD1273F41AA7EBE800D9D393 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273EF1AA7EBE800D9D393 /* CoreDataStack.swift */; };
+		CD1273F61AA7EBE800D9D393 /* Voice.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273F11AA7EBE800D9D393 /* Voice.swift */; };
+		CD1273F71AA7EBE800D9D393 /* VoiceMemos.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CD1273F21AA7EBE800D9D393 /* VoiceMemos.xcdatamodeld */; };
+		CD1273FB1AA7EBEC00D9D393 /* KMOverlayPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273F91AA7EBEC00D9D393 /* KMOverlayPresentationController.swift */; };
+		CD1273FC1AA7EBEC00D9D393 /* KMOverlayTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273FA1AA7EBEC00D9D393 /* KMOverlayTransitioner.swift */; };
+		CD1273FF1AA7EBF600D9D393 /* AudioSessionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273FE1AA7EBF600D9D393 /* AudioSessionHelper.swift */; };
+		F245F3FAC841E7AA0942992B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0588E348A241A320B4A31BFF /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CD1273C51AA7EB5F00D9D393 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CD1273A71AA7EB5F00D9D393 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CD1273AE1AA7EB5F00D9D393;
+			remoteInfo = VoiceMemos;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0588E348A241A320B4A31BFF /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2128F1C5D9E45D3DC19FD5ED /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		96A75660244B2C7958DDEEC6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		CD1273AF1AA7EB5F00D9D393 /* VoiceMemos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceMemos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD1273B31AA7EB5F00D9D393 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD1273B41AA7EB5F00D9D393 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CD1273B91AA7EB5F00D9D393 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		CD1273BB1AA7EB5F00D9D393 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		CD1273BE1AA7EB5F00D9D393 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		CD1273C41AA7EB5F00D9D393 /* VoiceMemosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoiceMemosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD1273C91AA7EB5F00D9D393 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD1273CA1AA7EB5F00D9D393 /* VoiceMemosTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMemosTests.swift; sourceTree = "<group>"; };
+		CD1273D51AA7EBDC00D9D393 /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
+		CD1273D61AA7EBDC00D9D393 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		CD1273D71AA7EBDC00D9D393 /* NoVoiceSelectedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoVoiceSelectedViewController.swift; sourceTree = "<group>"; };
+		CD1273D81AA7EBDC00D9D393 /* RecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordViewController.swift; sourceTree = "<group>"; };
+		CD1273D91AA7EBDC00D9D393 /* SplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
+		CD1273DA1AA7EBDC00D9D393 /* VoiceSearchResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceSearchResultsController.swift; sourceTree = "<group>"; };
+		CD1273DB1AA7EBDC00D9D393 /* VoicesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoicesTableViewController.swift; sourceTree = "<group>"; };
+		CD1273E41AA7EBE300D9D393 /* KMCircularProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMCircularProgressView.swift; sourceTree = "<group>"; };
+		CD1273E61AA7EBE300D9D393 /* KMVoiceRecordHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMVoiceRecordHUD.swift; sourceTree = "<group>"; };
+		CD1273E71AA7EBE300D9D393 /* VoiceTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceTableViewCell.swift; sourceTree = "<group>"; };
+		CD1273E81AA7EBE300D9D393 /* VoiceTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VoiceTableViewCell.xib; sourceTree = "<group>"; };
+		CD1273EF1AA7EBE800D9D393 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		CD1273F11AA7EBE800D9D393 /* Voice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Voice.swift; sourceTree = "<group>"; };
+		CD1273F31AA7EBE800D9D393 /* VoiceMemos.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VoiceMemos.xcdatamodel; sourceTree = "<group>"; };
+		CD1273F91AA7EBEC00D9D393 /* KMOverlayPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMOverlayPresentationController.swift; sourceTree = "<group>"; };
+		CD1273FA1AA7EBEC00D9D393 /* KMOverlayTransitioner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMOverlayTransitioner.swift; sourceTree = "<group>"; };
+		CD1273FE1AA7EBF600D9D393 /* AudioSessionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSessionHelper.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CD1273AC1AA7EB5F00D9D393 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F245F3FAC841E7AA0942992B /* Pods.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD1273C11AA7EB5F00D9D393 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0141AB4ADAE5D8A19CFC2A94 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				96A75660244B2C7958DDEEC6 /* Pods.debug.xcconfig */,
+				2128F1C5D9E45D3DC19FD5ED /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C7C8773CC697D8CB86499AED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0588E348A241A320B4A31BFF /* Pods.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CD1273A61AA7EB5F00D9D393 = {
+			isa = PBXGroup;
+			children = (
+				CD1273B11AA7EB5F00D9D393 /* VoiceMemos */,
+				CD1273C71AA7EB5F00D9D393 /* VoiceMemosTests */,
+				CD1273B01AA7EB5F00D9D393 /* Products */,
+				0141AB4ADAE5D8A19CFC2A94 /* Pods */,
+				C7C8773CC697D8CB86499AED /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		CD1273B01AA7EB5F00D9D393 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273AF1AA7EB5F00D9D393 /* VoiceMemos.app */,
+				CD1273C41AA7EB5F00D9D393 /* VoiceMemosTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CD1273B11AA7EB5F00D9D393 /* VoiceMemos */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273D41AA7EBDC00D9D393 /* Controller */,
+				CD1273EE1AA7EBE800D9D393 /* Model */,
+				CD1273E31AA7EBE300D9D393 /* View */,
+				CD1273F81AA7EBEC00D9D393 /* KMOverlayPresentation */,
+				CD1273FD1AA7EBF600D9D393 /* Helper */,
+				CD1273B41AA7EB5F00D9D393 /* AppDelegate.swift */,
+				CD1273B81AA7EB5F00D9D393 /* Main.storyboard */,
+				CD1273BB1AA7EB5F00D9D393 /* Images.xcassets */,
+				CD1273B21AA7EB5F00D9D393 /* Supporting Files */,
+			);
+			path = VoiceMemos;
+			sourceTree = "<group>";
+		};
+		CD1273B21AA7EB5F00D9D393 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273B31AA7EB5F00D9D393 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CD1273C71AA7EB5F00D9D393 /* VoiceMemosTests */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273CA1AA7EB5F00D9D393 /* VoiceMemosTests.swift */,
+				CD1273C81AA7EB5F00D9D393 /* Supporting Files */,
+			);
+			path = VoiceMemosTests;
+			sourceTree = "<group>";
+		};
+		CD1273C81AA7EB5F00D9D393 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273C91AA7EB5F00D9D393 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CD1273D41AA7EBDC00D9D393 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273D91AA7EBDC00D9D393 /* SplitViewController.swift */,
+				CD1273D51AA7EBDC00D9D393 /* BaseTableViewController.swift */,
+				CD1273DA1AA7EBDC00D9D393 /* VoiceSearchResultsController.swift */,
+				CD1273DB1AA7EBDC00D9D393 /* VoicesTableViewController.swift */,
+				CD1273D61AA7EBDC00D9D393 /* DetailViewController.swift */,
+				CD1273D81AA7EBDC00D9D393 /* RecordViewController.swift */,
+				CD1273D71AA7EBDC00D9D393 /* NoVoiceSelectedViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		CD1273E31AA7EBE300D9D393 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273E41AA7EBE300D9D393 /* KMCircularProgressView.swift */,
+				CD1273E61AA7EBE300D9D393 /* KMVoiceRecordHUD.swift */,
+				CD1273E71AA7EBE300D9D393 /* VoiceTableViewCell.swift */,
+				CD1273E81AA7EBE300D9D393 /* VoiceTableViewCell.xib */,
+				CD1273BD1AA7EB5F00D9D393 /* LaunchScreen.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CD1273EE1AA7EBE800D9D393 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273F21AA7EBE800D9D393 /* VoiceMemos.xcdatamodeld */,
+				CD1273EF1AA7EBE800D9D393 /* CoreDataStack.swift */,
+				CD1273F11AA7EBE800D9D393 /* Voice.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CD1273F81AA7EBEC00D9D393 /* KMOverlayPresentation */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273F91AA7EBEC00D9D393 /* KMOverlayPresentationController.swift */,
+				CD1273FA1AA7EBEC00D9D393 /* KMOverlayTransitioner.swift */,
+			);
+			path = KMOverlayPresentation;
+			sourceTree = "<group>";
+		};
+		CD1273FD1AA7EBF600D9D393 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				CD1273FE1AA7EBF600D9D393 /* AudioSessionHelper.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CD1273AE1AA7EB5F00D9D393 /* VoiceMemos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD1273CE1AA7EB5F00D9D393 /* Build configuration list for PBXNativeTarget "VoiceMemos" */;
+			buildPhases = (
+				EEB3F7DEB8C8B9C13473DF09 /* Check Pods Manifest.lock */,
+				CD1273AB1AA7EB5F00D9D393 /* Sources */,
+				CD1273AC1AA7EB5F00D9D393 /* Frameworks */,
+				CD1273AD1AA7EB5F00D9D393 /* Resources */,
+				44451EC73D76A00D197C4C76 /* Embed Pods Frameworks */,
+				2CD6C27099002B0262CCA0AB /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VoiceMemos;
+			productName = VoiceMemos;
+			productReference = CD1273AF1AA7EB5F00D9D393 /* VoiceMemos.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CD1273C31AA7EB5F00D9D393 /* VoiceMemosTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD1273D11AA7EB5F00D9D393 /* Build configuration list for PBXNativeTarget "VoiceMemosTests" */;
+			buildPhases = (
+				CD1273C01AA7EB5F00D9D393 /* Sources */,
+				CD1273C11AA7EB5F00D9D393 /* Frameworks */,
+				CD1273C21AA7EB5F00D9D393 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CD1273C61AA7EB5F00D9D393 /* PBXTargetDependency */,
+			);
+			name = VoiceMemosTests;
+			productName = VoiceMemosTests;
+			productReference = CD1273C41AA7EB5F00D9D393 /* VoiceMemosTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CD1273A71AA7EB5F00D9D393 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Zhouqi Mo";
+				TargetAttributes = {
+					CD1273AE1AA7EB5F00D9D393 = {
+						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 2QB593EA72;
+					};
+					CD1273C31AA7EB5F00D9D393 = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = CD1273AE1AA7EB5F00D9D393;
+					};
+				};
+			};
+			buildConfigurationList = CD1273AA1AA7EB5F00D9D393 /* Build configuration list for PBXProject "VoiceMemos" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CD1273A61AA7EB5F00D9D393;
+			productRefGroup = CD1273B01AA7EB5F00D9D393 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CD1273AE1AA7EB5F00D9D393 /* VoiceMemos */,
+				CD1273C31AA7EB5F00D9D393 /* VoiceMemosTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CD1273AD1AA7EB5F00D9D393 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD1273ED1AA7EBE300D9D393 /* VoiceTableViewCell.xib in Resources */,
+				CD1273BA1AA7EB5F00D9D393 /* Main.storyboard in Resources */,
+				CD1273BF1AA7EB5F00D9D393 /* LaunchScreen.xib in Resources */,
+				CD1273BC1AA7EB5F00D9D393 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD1273C21AA7EB5F00D9D393 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2CD6C27099002B0262CCA0AB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		44451EC73D76A00D197C4C76 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EEB3F7DEB8C8B9C13473DF09 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CD1273AB1AA7EB5F00D9D393 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD1273EC1AA7EBE300D9D393 /* VoiceTableViewCell.swift in Sources */,
+				CD1273FF1AA7EBF600D9D393 /* AudioSessionHelper.swift in Sources */,
+				CD1273DC1AA7EBDC00D9D393 /* BaseTableViewController.swift in Sources */,
+				CD1273FB1AA7EBEC00D9D393 /* KMOverlayPresentationController.swift in Sources */,
+				CD1273E01AA7EBDC00D9D393 /* SplitViewController.swift in Sources */,
+				CD1273E11AA7EBDC00D9D393 /* VoiceSearchResultsController.swift in Sources */,
+				CD1273FC1AA7EBEC00D9D393 /* KMOverlayTransitioner.swift in Sources */,
+				CD1273B51AA7EB5F00D9D393 /* AppDelegate.swift in Sources */,
+				CD1273F41AA7EBE800D9D393 /* CoreDataStack.swift in Sources */,
+				CD1273DF1AA7EBDC00D9D393 /* RecordViewController.swift in Sources */,
+				CD1273EB1AA7EBE300D9D393 /* KMVoiceRecordHUD.swift in Sources */,
+				CD1273F71AA7EBE800D9D393 /* VoiceMemos.xcdatamodeld in Sources */,
+				CD1273E91AA7EBE300D9D393 /* KMCircularProgressView.swift in Sources */,
+				CD1273DD1AA7EBDC00D9D393 /* DetailViewController.swift in Sources */,
+				CD1273F61AA7EBE800D9D393 /* Voice.swift in Sources */,
+				CD1273E21AA7EBDC00D9D393 /* VoicesTableViewController.swift in Sources */,
+				CD1273DE1AA7EBDC00D9D393 /* NoVoiceSelectedViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD1273C01AA7EB5F00D9D393 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD1273CB1AA7EB5F00D9D393 /* VoiceMemosTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CD1273C61AA7EB5F00D9D393 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CD1273AE1AA7EB5F00D9D393 /* VoiceMemos */;
+			targetProxy = CD1273C51AA7EB5F00D9D393 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CD1273B81AA7EB5F00D9D393 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CD1273B91AA7EB5F00D9D393 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		CD1273BD1AA7EB5F00D9D393 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CD1273BE1AA7EB5F00D9D393 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			path = ..;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CD1273CC1AA7EB5F00D9D393 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CD1273CD1AA7EB5F00D9D393 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CD1273CF1AA7EB5F00D9D393 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 96A75660244B2C7958DDEEC6 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = VoiceMemos/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CD1273D01AA7EB5F00D9D393 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2128F1C5D9E45D3DC19FD5ED /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = VoiceMemos/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CD1273D21AA7EB5F00D9D393 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = VoiceMemosTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceMemos.app/VoiceMemos";
+			};
+			name = Debug;
+		};
+		CD1273D31AA7EB5F00D9D393 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = VoiceMemosTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoiceMemos.app/VoiceMemos";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CD1273AA1AA7EB5F00D9D393 /* Build configuration list for PBXProject "VoiceMemos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD1273CC1AA7EB5F00D9D393 /* Debug */,
+				CD1273CD1AA7EB5F00D9D393 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD1273CE1AA7EB5F00D9D393 /* Build configuration list for PBXNativeTarget "VoiceMemos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD1273CF1AA7EB5F00D9D393 /* Debug */,
+				CD1273D01AA7EB5F00D9D393 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD1273D11AA7EB5F00D9D393 /* Build configuration list for PBXNativeTarget "VoiceMemosTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD1273D21AA7EB5F00D9D393 /* Debug */,
+				CD1273D31AA7EB5F00D9D393 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CD1273F21AA7EBE800D9D393 /* VoiceMemos.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CD1273F31AA7EBE800D9D393 /* VoiceMemos.xcdatamodel */,
+			);
+			currentVersion = CD1273F31AA7EBE800D9D393 /* VoiceMemos.xcdatamodel */;
+			path = VoiceMemos.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = CD1273A71AA7EB5F00D9D393 /* Project object */;
+}
