@@ -119,7 +119,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SUc-lA-S6v" id="yrU-yL-OOg">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Subject" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Skd-7e-ME8">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Subject" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Skd-7e-ME8">
                                                     <rect key="frame" x="18" y="8" width="50" height="27"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -158,12 +158,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Kz-dk-hJI">
-                                                    <rect key="frame" x="79" y="8" width="503" height="27"/>
+                                                    <rect key="frame" x="84" y="8" width="498" height="27"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOQ-yQ-3XD">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOQ-yQ-3XD">
                                                     <rect key="frame" x="18" y="8" width="31" height="27"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -174,7 +174,7 @@
                                                 <constraint firstItem="5Kz-dk-hJI" firstAttribute="bottom" secondItem="iok-5s-TYs" secondAttribute="bottomMargin" id="6vV-IG-wC4"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="5Kz-dk-hJI" secondAttribute="trailing" constant="10" id="8AN-VO-HPq"/>
                                                 <constraint firstItem="mOQ-yQ-3XD" firstAttribute="bottom" secondItem="iok-5s-TYs" secondAttribute="bottomMargin" id="Jq2-Qm-iXh"/>
-                                                <constraint firstItem="5Kz-dk-hJI" firstAttribute="leading" secondItem="mOQ-yQ-3XD" secondAttribute="trailing" constant="30" id="TfI-s2-fpv"/>
+                                                <constraint firstItem="5Kz-dk-hJI" firstAttribute="leading" secondItem="mOQ-yQ-3XD" secondAttribute="trailing" constant="35" id="TfI-s2-fpv"/>
                                                 <constraint firstItem="mOQ-yQ-3XD" firstAttribute="leading" secondItem="iok-5s-TYs" secondAttribute="leadingMargin" constant="10" id="UrV-2J-Nxr"/>
                                                 <constraint firstItem="mOQ-yQ-3XD" firstAttribute="top" secondItem="iok-5s-TYs" secondAttribute="topMargin" id="V8x-h8-VqU"/>
                                                 <constraint firstItem="5Kz-dk-hJI" firstAttribute="top" secondItem="iok-5s-TYs" secondAttribute="topMargin" id="bib-w2-HOh"/>
