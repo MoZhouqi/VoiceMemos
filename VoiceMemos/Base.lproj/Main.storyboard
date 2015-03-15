@@ -95,7 +95,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1660" y="-39"/>
+            <point key="canvasLocation" x="1385" y="-90"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="ufC-wZ-h7g">
@@ -224,7 +224,7 @@
                                                     <rect key="frame" x="557" y="8" width="25" height="28"/>
                                                     <state key="normal" image="Play"/>
                                                     <connections>
-                                                        <action selector="playAudioButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="5y8-Rf-gdr"/>
+                                                        <action selector="playAudioButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="EgU-8F-jjW"/>
                                                     </connections>
                                                 </button>
                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="jGw-h1-iXk">
@@ -232,7 +232,7 @@
                                                     <gestureRecognizers/>
                                                     <connections>
                                                         <action selector="progressSliderValueChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="zXn-WG-JpM"/>
-                                                        <outletCollection property="gestureRecognizers" destination="10P-I2-G3B" appends="YES" id="XBK-Qi-qus"/>
+                                                        <outletCollection property="gestureRecognizers" destination="10P-I2-G3B" appends="YES" id="o4M-V1-64Z"/>
                                                     </connections>
                                                 </slider>
                                             </subviews>
@@ -274,7 +274,7 @@
                     <navigationItem key="navigationItem" id="MWm-JI-Cj8">
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="cmm-Tm-sRk">
                             <connections>
-                                <action selector="saveVoiceButtonPressed:" destination="vXZ-lx-hvc" id="olL-Uf-Xbg"/>
+                                <action selector="saveVoiceButtonTapped:" destination="vXZ-lx-hvc" id="o6t-4H-hRC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -290,11 +290,11 @@
                 </tapGestureRecognizer>
                 <tapGestureRecognizer id="10P-I2-G3B" userLabel="Slider Tapped">
                     <connections>
-                        <action selector="sliderTapped:" destination="vXZ-lx-hvc" id="7XN-x6-mSV"/>
+                        <action selector="progressSliderTapped:" destination="vXZ-lx-hvc" id="4Pl-Ia-K8N"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1655" y="628"/>
+            <point key="canvasLocation" x="1385" y="628"/>
         </scene>
         <!--No Voice Selected View Controller-->
         <scene sceneID="rCg-Rk-bve">
@@ -326,7 +326,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zup-7c-qK6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="737" y="-957"/>
+            <point key="canvasLocation" x="687" y="-955"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Z0a-I6-ouT">
@@ -339,7 +339,7 @@
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4IW-4P-R0r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-824" y="-239"/>
+            <point key="canvasLocation" x="-744" y="-217"/>
         </scene>
         <!--Main Navigation Controller-->
         <scene sceneID="29V-Tv-U7m">
@@ -357,7 +357,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Fk-8c-Gfr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-31" y="-223"/>
+            <point key="canvasLocation" x="-37" y="-217"/>
         </scene>
         <!--Main Table View Controller-->
         <scene sceneID="aX9-hv-iyz">
@@ -388,7 +388,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cPN-1B-QYb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749" y="-228.5"/>
+            <point key="canvasLocation" x="681" y="-217"/>
         </scene>
         <!--Detail Navigation Controller-->
         <scene sceneID="tWH-Zo-7YY">
@@ -406,7 +406,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UgT-tT-PW1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749" y="628"/>
+            <point key="canvasLocation" x="681" y="628"/>
         </scene>
         <!--No Voice Selected Navigation Controller-->
         <scene sceneID="cZC-7B-hhU">
@@ -424,7 +424,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jow-mA-euD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-55" y="-965"/>
+            <point key="canvasLocation" x="-27" y="-955"/>
         </scene>
     </scenes>
     <resources>
@@ -433,6 +433,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="d6g-Px-kKZ"/>
-        <segue reference="9Un-h3-8BE"/>
+        <segue reference="seo-3A-eMD"/>
     </inferredMetricsTieBreakers>
 </document>

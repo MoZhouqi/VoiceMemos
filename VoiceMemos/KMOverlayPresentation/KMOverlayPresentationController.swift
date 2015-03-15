@@ -69,12 +69,12 @@ UIViewControllerTransitioningDelegate {
     override func frameOfPresentedViewInContainerView() -> CGRect {
         let containerBounds = containerView.bounds
         var presentedViewFrame = CGRectZero
-        presentedViewFrame.size = CGSizeMake(200, 250);
-        presentedViewFrame.origin = CGPointMake(containerBounds.size.width / 2.0, containerBounds.size.height / 2.0);
-        presentedViewFrame.origin.x -= presentedViewFrame.size.width / 2.0;
-        presentedViewFrame.origin.y -= presentedViewFrame.size.height / 2.0;
+        presentedViewFrame.size = CGSizeMake(200, 250)
+        presentedViewFrame.origin = CGPointMake(containerBounds.size.width / 2.0, containerBounds.size.height / 2.0)
+        presentedViewFrame.origin.x -= presentedViewFrame.size.width / 2.0
+        presentedViewFrame.origin.y -= presentedViewFrame.size.height / 2.0
         
-        return presentedViewFrame;
+        return presentedViewFrame
     }
-
+    
 }

@@ -87,7 +87,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
             let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as UInt
             if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
                 if playback.audioPlayer?.playing == true {
-                    playback.state = .Pause
+                    playback.state = .Pause(deactive: true)
                 }
             }
         }
@@ -97,7 +97,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
         if let userInfo = notification.userInfo {
             if let audioObject: AnyObject = userInfo[AudioSessionHelper.Constants.Notification.AudioObjectWillStart.UserInfo.AudioObjectKey] {
                 if playback.audioPlayer != audioObject as? AVAudioPlayer && playback.audioPlayer?.playing == true {
-                    playback.state = .Pause
+                    playback.state = .Pause(deactive: false)
                 }
             }
         }
@@ -165,23 +165,6 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        func currentVoice() -> Bool {
-            if segue.identifier == "Change Voice" {
-                let voice = sender as Voice
-                if voice == playback.voice {
-                    return true
-                }
-            }
-            return false
-        }
-        
-        if currentVoice() {
-            playback.state = .Default
-        } else {
-            playback.state = .Pause
-        }
-        
         if segue.identifier == "Add Voice" || segue.identifier == "Change Voice" {
             
             let detailViewController = segue.destinationViewController.topViewController as DetailViewController
@@ -201,20 +184,27 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
             
             if segue.identifier == "Add Voice" {
                 
-                let voiceEntity =
-                NSEntityDescription.entityForName("Voice", inManagedObjectContext: childContext)
+                let voiceEntity = NSEntityDescription.entityForName("Voice", inManagedObjectContext: childContext)
                 let voice = Voice(entity: voiceEntity!, insertIntoManagedObjectContext: childContext)
                 voice.date = NSDate()
                 voice.subject = ""
                 detailViewController.voice = voice
                 
+                playback.state = .Pause(deactive: true)
+                
             } else if segue.identifier == "Change Voice" {
+                
                 let voice = sender as Voice
-                
                 let childVoice = childContext.objectWithID(voice.objectID) as Voice
-                
                 detailViewController.voice = childVoice
                 
+                if voice == playback.voice {
+                    playback.audioPlayer?.delegate = nil
+                    detailViewController.currentAudioPlayer = playback.audioPlayer
+                    playback.state = .Default(deactive: false)
+                } else {
+                    playback.state = .Pause(deactive: true)
+                }
             }
         }
     }
@@ -333,7 +323,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
         var voice: Voice?
         var timer: NSTimer?
         var audioPlayer: AVAudioPlayer?
-        var state: KMPlaybackState = .Default {
+        var state: KMPlaybackState = .Default(deactive: false) {
             didSet {
                 state.changePlaybackState(self)
             }
@@ -353,9 +343,9 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
     
     enum KMPlaybackState {
         case Play
-        case Pause
+        case Pause(deactive: Bool)
         case Finish
-        case Default
+        case Default(deactive: Bool)
         
         func changePlaybackState(playback: KMPlayback) {
             switch self {
@@ -377,12 +367,14 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
                     UIDevice.currentDevice().proximityMonitoringEnabled = true
                 }
                 playback.progressView.iconStyle = .Pause
-            case .Pause:
+            case .Pause(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer?.pause()
                 UIDevice.currentDevice().proximityMonitoringEnabled = false
-                AudioSessionHelper.setupSessionActive(false)
+                if deactive.0 {
+                    AudioSessionHelper.setupSessionActive(false)
+                }
                 playback.progressView.iconStyle = .Play
             case .Finish:
                 playback.timer?.invalidate()
@@ -391,13 +383,15 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
                 AudioSessionHelper.setupSessionActive(false)
                 playback.progressView.progress = 1.0
                 playback.progressView.iconStyle = .Play
-            case .Default:
+            case .Default(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer = nil
                 playback.voice = nil
                 UIDevice.currentDevice().proximityMonitoringEnabled = false
-                AudioSessionHelper.setupSessionActive(false)
+                if deactive.0 {
+                    AudioSessionHelper.setupSessionActive(false)
+                }
                 playback.progressView.removeFromSuperview()
                 playback.progressView.setProgress(0.0, animated: false)
             }
@@ -408,9 +402,10 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
     
     func changePlaybackStateForVoice(voice: Voice, cell: VoiceTableViewCell) {
         if voice == playback.voice {
-            if playback.state == .Play {
-                playback.state = .Pause
-            } else {
+            switch playback.state {
+            case .Play:
+                playback.state = .Pause(deactive: true)
+            default:
                 playback.state = .Play
             }
         } else {
@@ -420,7 +415,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
             playback.audioPlayer?.delegate = self
             
             if let err = error {
-                playback.state = .Default
+                playback.state = .Default(deactive: true)
                 
                 if err.code == 2003334207 {
                     let alertController = UIAlertController(title: nil, message: "The audio file seems to be corrupted. Do you want to delete this record?", preferredStyle: .Alert)
@@ -449,7 +444,9 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
     }
     
     func deleteVoiceInPersistentStore(voice: Voice) {
-        playback.state = .Default
+        if voice == playback.voice {
+            playback.state = .Default(deactive: true)
+        }
         
         let removeFileURL = directoryURL.URLByAppendingPathComponent(voice.filename!)
         NSFileManager.defaultManager().removeItemAtURL(removeFileURL, error: nil)

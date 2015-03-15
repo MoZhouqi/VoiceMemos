@@ -13,9 +13,9 @@ Voice Memos is a voice recorder App for iPhone and iPad that covers some of the 
 
 - Adaptive user interface
 
-- Support all devices and any orientation
+- All devices and any orientation support
 
-- UISplitViewController/UISearchController/UIAlertController
+- UISplitViewController / UISearchController / UIAlertController
 
 - Custom Presentations
 

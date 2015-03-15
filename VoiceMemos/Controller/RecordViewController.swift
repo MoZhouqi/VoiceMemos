@@ -114,7 +114,7 @@ class RecordViewController: UIViewController {
             
             if recorder.recording {
                 recorder.updateMeters()
-                let ALPHA = 0.05;
+                let ALPHA = 0.05
                 let peakPower = pow(10, (ALPHA * Double(recorder.peakPowerForChannel(0))))
                 var rate: Double = 0.0
                 if (peakPower <= 0.2) {

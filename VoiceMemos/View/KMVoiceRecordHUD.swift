@@ -40,19 +40,18 @@ class KMVoiceRecordHUD: UIView {
     
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
-        CGContextTranslateCTM(context, 0, bounds.size.height);
-        CGContextScaleCTM(context, 1, -1);
+        CGContextTranslateCTM(context, 0, bounds.size.height)
+        CGContextScaleCTM(context, 1, -1)
         
-        CGContextDrawImage(context, bounds, image.CGImage);
+        CGContextDrawImage(context, bounds, image.CGImage)
         CGContextClipToMask(context, bounds, image.CGImage)
-
-        CGContextSetFillColor(context, CGColorGetComponents(fillColor.CGColor));
-        CGContextFillRect(context, CGRectMake(0, 0, bounds.width, bounds.height * rate));
-
+        
+        CGContextSetFillColor(context, CGColorGetComponents(fillColor.CGColor))
+        CGContextFillRect(context, CGRectMake(0, 0, bounds.width, bounds.height * rate))
     }
     
     override func prepareForInterfaceBuilder() {
         let bundle = NSBundle(forClass: self.dynamicType)
-         image = UIImage(named: "Mic", inBundle: bundle, compatibleWithTraitCollection: self.traitCollection)
+        image = UIImage(named: "Mic", inBundle: bundle, compatibleWithTraitCollection: self.traitCollection)
     }
 }

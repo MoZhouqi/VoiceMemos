@@ -28,6 +28,7 @@ class DetailViewController: UIViewController {
     var coreDataStack: CoreDataStack!
     var context: NSManagedObjectContext!
     var voice: Voice!
+    var currentAudioPlayer: AVAudioPlayer?
     weak var delegate: DetailViewControllerDelegate?
     var directoryURL: NSURL!
     var voiceHasChanges: Bool {
@@ -92,7 +93,11 @@ class DetailViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        playback.state = .Default
+        if playback.audioPlayer?.playing == true {
+            playback.state = .Default(deactive: true)
+        } else {
+            playback.state = .Default(deactive: false)
+        }
         
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
@@ -115,7 +120,7 @@ class DetailViewController: UIViewController {
         tableView.scrollIndicatorInsets = contentInsets
         
         var aRect = view.frame
-        aRect.size.height -= kbRect.size.height;
+        aRect.size.height -= kbRect.size.height
         if !CGRectContainsPoint(aRect, subjectTextView.frame.origin) {
             tableView.scrollRectToVisible(subjectTextView.frame, animated: true)
         }
@@ -134,7 +139,7 @@ class DetailViewController: UIViewController {
             let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as UInt
             if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
                 if playback.audioPlayer?.playing == true {
-                    playback.state = .Pause
+                    playback.state = .Pause(deactive: true)
                 }
             }
         }
@@ -144,7 +149,7 @@ class DetailViewController: UIViewController {
         if let userInfo = notification.userInfo {
             if let audioObject: AnyObject = userInfo[AudioSessionHelper.Constants.Notification.AudioObjectWillStart.UserInfo.AudioObjectKey] {
                 if playback.audioPlayer != audioObject as? AVAudioPlayer && playback.audioPlayer?.playing == true {
-                    playback.state = .Pause
+                    playback.state = .Pause(deactive: false)
                 }
             }
         }
@@ -175,7 +180,7 @@ class DetailViewController: UIViewController {
         dateLabel.text = dateFormatter.stringFromDate(datePicker.date)
     }
     
-    @IBAction func sliderTapped(sender: UITapGestureRecognizer) {
+    @IBAction func progressSliderTapped(sender: UITapGestureRecognizer) {
         if let slider = sender.view as? UISlider {
             let point = sender.locationInView(slider)
             let percentage = Float(point.x / slider.bounds.width)
@@ -191,10 +196,10 @@ class DetailViewController: UIViewController {
         }
     }
     
-    @IBAction func playAudioButtonPressed(sender: AnyObject) {
+    @IBAction func playAudioButtonTapped(sender: AnyObject) {
         if let player = playback.audioPlayer {
             if player.playing {
-                playback.state = .Pause
+                playback.state = .Pause(deactive: true)
             } else {
                 playback.state = .Play
             }
@@ -232,7 +237,7 @@ class DetailViewController: UIViewController {
         }
     }
     
-    @IBAction func saveVoiceButtonPressed(sender: AnyObject) {
+    @IBAction func saveVoiceButtonTapped(sender: AnyObject) {
         updateVoice()
         if voice.filename != nil {
             delegate?.didFinishViewController(self, didSave: true)
@@ -249,7 +254,7 @@ class DetailViewController: UIViewController {
         var audioPlayer: AVAudioPlayer?
         var timer: NSTimer?
         
-        var state: KMPlaybackState = .Default {
+        var state: KMPlaybackState = .Default(deactive: false) {
             didSet {
                 state.changePlaybackState(self)
             }
@@ -264,9 +269,9 @@ class DetailViewController: UIViewController {
     
     enum KMPlaybackState {
         case Play
-        case Pause
+        case Pause(deactive: Bool)
         case Finish
-        case Default
+        case Default(deactive: Bool)
         
         func changePlaybackState(playback: KMPlayback) {
             switch self {
@@ -282,18 +287,22 @@ class DetailViewController: UIViewController {
                         repeats: true)
                     NSRunLoop.currentRunLoop().addTimer(playback.timer!, forMode: NSRunLoopCommonModes)
                     AudioSessionHelper.setupSessionActive(true)
-                    player.currentTime = NSTimeInterval(playback.progressSlider.value) *  player.duration
-                    player.play()
+                    if !player.playing {
+                        player.currentTime = NSTimeInterval(playback.progressSlider.value) * player.duration
+                        player.play()
+                    }
                     UIDevice.currentDevice().proximityMonitoringEnabled = true
                     playback.playButton.setImage(UIImage(named: "Pause"), forState: .Normal)
                     playback.updateprogressSliderValue()
                 }
-            case .Pause:
+            case .Pause(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer?.pause()
                 UIDevice.currentDevice().proximityMonitoringEnabled = false
-                AudioSessionHelper.setupSessionActive(false)
+                if deactive.0 {
+                    AudioSessionHelper.setupSessionActive(false)
+                }
                 playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
                 playback.updateprogressSliderValue()
             case .Finish:
@@ -303,12 +312,14 @@ class DetailViewController: UIViewController {
                 AudioSessionHelper.setupSessionActive(false)
                 playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
                 playback.progressSlider.value = 1.0
-            case .Default:
+            case .Default(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer = nil
                 UIDevice.currentDevice().proximityMonitoringEnabled = false
-                AudioSessionHelper.setupSessionActive(false)
+                if deactive.0 {
+                    AudioSessionHelper.setupSessionActive(false)
+                }
                 playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
                 playback.progressSlider.value = 0.0
             }
@@ -366,9 +377,9 @@ class DetailViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        playback.state = .Default
-        
         if segue.identifier == "Record" {
+            playback.state = .Default(deactive: false)
+            
             let recordViewController = segue.destinationViewController as RecordViewController
             recordViewController.configRecorderWithURL(tmpStoreURL, delegate: self)
             
@@ -517,6 +528,18 @@ extension DetailViewController: UITableViewDataSource {
                 playback.playButton.hidden = true
                 playback.progressSlider.hidden = true
                 recordButton.setTitle(" Tap to record", forState: .Normal)
+            }
+            
+            if let audioPlayer = currentAudioPlayer {
+                playback.audioPlayer = audioPlayer
+                audioPlayer.delegate = self
+                playback.progressSlider.value = Float(audioPlayer.currentTime / audioPlayer.duration)
+                if audioPlayer.playing {
+                    playback.state = .Play
+                } else {
+                    playback.state = .Pause(deactive: true)
+                }
+                currentAudioPlayer = nil
             }
         }
         return cell
