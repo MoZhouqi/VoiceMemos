@@ -10,5 +10,5 @@
 #define COCOAPODS_POD_AVAILABLE_KMPlaceholderTextView
 #define COCOAPODS_VERSION_MAJOR_KMPlaceholderTextView 0
 #define COCOAPODS_VERSION_MINOR_KMPlaceholderTextView 1
-#define COCOAPODS_VERSION_PATCH_KMPlaceholderTextView 1
+#define COCOAPODS_VERSION_PATCH_KMPlaceholderTextView 2
 

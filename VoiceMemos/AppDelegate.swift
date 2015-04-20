@@ -17,8 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        let splitViewController = window!.rootViewController as UISplitViewController
-        let voicesTableViewController = splitViewController.viewControllers[0].topViewController as VoicesTableViewController
+        let splitViewController = window!.rootViewController as! UISplitViewController
+        let voicesTableViewController = splitViewController.viewControllers[0].topViewController as! VoicesTableViewController
         voicesTableViewController.coreDataStack = coreDataStack
         return true
     }

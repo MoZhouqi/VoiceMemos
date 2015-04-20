@@ -23,7 +23,7 @@ Voice Memos is a voice recorder App for iPhone and iPad that covers some of the 
 
 ## Requirements
 
-- Xcode 6.1.1
+- Xcode 6.3
 
 ## License
 

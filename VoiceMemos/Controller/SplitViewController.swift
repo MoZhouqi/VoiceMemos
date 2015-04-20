@@ -35,7 +35,7 @@ extension SplitViewController: UISplitViewControllerDelegate {
     
     func splitViewController(splitViewController: UISplitViewController, separateSecondaryViewControllerFromPrimaryViewController primaryViewController: UIViewController!) -> UIViewController? {
         if let vc = (primaryViewController as? UINavigationController)?.visibleViewController as? VoicesTableViewController {
-            let viewController = storyboard?.instantiateViewControllerWithIdentifier("NoVoiceSelected") as UIViewController
+            let viewController = storyboard?.instantiateViewControllerWithIdentifier("NoVoiceSelected") as! UIViewController
             return viewController
         } else {
             return nil

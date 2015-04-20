@@ -28,15 +28,20 @@ view.addSubview(placeholderTextView)
 
 ### CocoaPods
 
-You can install the latest pre-release version of CocoaPods with the following command:
+You can install the latest release version of CocoaPods with the following command:
 
 ```bash
-$ gem install cocoapods --pre
+$ gem install cocoapods
 ```
+
+*CocoaPods v0.36 or later required*
 
 Simply add the following line to your Podfile:
 
 ```ruby
+platform :ios, '8.0' 
+use_frameworks!
+
 pod 'KMPlaceholderTextView', '~> 0.1.1' 
 ```
 
@@ -48,8 +53,8 @@ $ pod install
 
 ## Requirements
 
-- iOS 7.0 and later 
-- Xcode 6.1.1
+- iOS 7.0+
+- Xcode 6.3
 
 ## License
 

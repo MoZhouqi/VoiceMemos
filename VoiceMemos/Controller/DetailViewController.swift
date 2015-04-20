@@ -136,7 +136,7 @@ class DetailViewController: UIViewController {
     
     func handleInterruption(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as UInt
+            let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as! UInt
             if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
                 if playback.audioPlayer?.playing == true {
                     playback.state = .Pause(deactive: true)
@@ -380,7 +380,7 @@ class DetailViewController: UIViewController {
         if segue.identifier == "Record" {
             playback.state = .Default(deactive: false)
             
-            let recordViewController = segue.destinationViewController as RecordViewController
+            let recordViewController = segue.destinationViewController as! RecordViewController
             recordViewController.configRecorderWithURL(tmpStoreURL, delegate: self)
             
             overlayTransitioningDelegate = KMOverlayTransitioningDelegate()
@@ -499,7 +499,7 @@ extension DetailViewController: UITableViewDataSource {
         default:
             break
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier, forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier, forIndexPath: indexPath) as! UITableViewCell
         
         if let subheadlineTableViewCell = cell as? SubheadlineTableViewCell {
             subheadlineTableViewCell.updateFonts()

@@ -53,7 +53,7 @@ class RecordViewController: UIViewController {
     
     func handleInterruption(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as UInt
+            let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as! UInt
             if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
                 if audioRecorder?.recording == true {
                     audioRecorder?.pause()
@@ -144,7 +144,7 @@ class RecordViewController: UIViewController {
                     false: AVLinearPCMIsFloatKey,
                 ]
                 var error: NSError?
-                self.audioRecorder = AVAudioRecorder(URL: url, settings: recordSettings, error: &error)
+                self.audioRecorder = AVAudioRecorder(URL: url, settings: recordSettings as [NSObject : AnyObject], error: &error)
                 if let err = error {
                     println("Could not initialize recorder: \(err)")
                 }

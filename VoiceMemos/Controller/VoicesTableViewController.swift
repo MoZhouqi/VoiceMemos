@@ -30,7 +30,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
     
     lazy var directoryURL: NSURL = {
         var error: NSError?
-        let doucumentURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as NSURL
+        let doucumentURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as! NSURL
         
         let _directoryURL = doucumentURL.URLByAppendingPathComponent("Voice")
         
@@ -84,7 +84,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
     
     func handleInterruption(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as UInt
+            let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as! UInt
             if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
                 if playback.audioPlayer?.playing == true {
                     playback.state = .Pause(deactive: true)
@@ -164,10 +164,18 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
         }
     }
     
+    func  voiceForRowAtIndexPath(indexPath: NSIndexPath, WithTableView tableView: UITableView) -> Voice {
+        if tableView == self.tableView {
+            return self.fetchedResultsController.objectAtIndexPath(indexPath) as! Voice
+        } else {
+            return self.resultsTableController.filteredVoices[indexPath.row]
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "Add Voice" || segue.identifier == "Change Voice" {
             
-            let detailViewController = segue.destinationViewController.topViewController as DetailViewController
+            let detailViewController = segue.destinationViewController.topViewController as! DetailViewController
             selectedVoice = detailViewController
             
             detailViewController.delegate = self
@@ -194,8 +202,8 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
                 
             } else if segue.identifier == "Change Voice" {
                 
-                let voice = sender as Voice
-                let childVoice = childContext.objectWithID(voice.objectID) as Voice
+                let voice = sender as! Voice
+                let childVoice = childContext.objectWithID(voice.objectID) as! Voice
                 detailViewController.voice = childVoice
                 
                 if voice == playback.voice {
@@ -223,46 +231,20 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
             let sectionInfo = fetchedResultsController.sections![section]
-                as NSFetchedResultsSectionInfo
+                as! NSFetchedResultsSectionInfo
             return sectionInfo.numberOfObjects
         } else {
             return resultsTableController.filteredVoices.count
         }
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return .Delete
-    }
-    
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        switch editingStyle {
-        case .Delete:
-            let voice = voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
-            
-            if tableView == resultsTableController.tableView {
-                resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
-                resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            }
-            
-            deleteVoiceInPersistentStore(voice)
-            
-        default:
-            break
-        }
-    }
-    
-    // MARK: - Table view delegate
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as VoiceTableViewCell
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.TableViewCell.identifier) as! VoiceTableViewCell
+        
         let voice = voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
         
-        changePlaybackStateForVoice(voice, cell: cell)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        configureCell(cell, forVoice: voice)
+        return cell
     }
     
     func configureCell(cell: VoiceTableViewCell, forVoice voice: Voice) {
@@ -291,21 +273,35 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
         }
     }
     
-    func  voiceForRowAtIndexPath(indexPath: NSIndexPath, WithTableView tableView: UITableView) -> Voice {
-        if tableView == self.tableView {
-            return self.fetchedResultsController.objectAtIndexPath(indexPath) as Voice
-        } else {
-            return self.resultsTableController.filteredVoices[indexPath.row]
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        switch editingStyle {
+        case .Delete:
+            let voice = voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
+            
+            if tableView == resultsTableController.tableView {
+                resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
+                resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            }
+            
+            deleteVoiceInPersistentStore(voice)
+            
+        default:
+            break
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.TableViewCell.identifier) as VoiceTableViewCell
-        
+    // MARK: - Table view delegate
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! VoiceTableViewCell
         let voice = voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
         
-        configureCell(cell, forVoice: voice)
-        return cell
+        changePlaybackStateForVoice(voice, cell: cell)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
@@ -313,7 +309,10 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
             let voice = self.voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
             self.performSegueWithIdentifier("Change Voice", sender: voice)
         }
-        
+    }
+    
+    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .Delete
     }
     
     // MARK: - Playback Control
@@ -496,21 +495,21 @@ extension VoicesTableViewController: NSFetchedResultsControllerDelegate {
     
     func controller(controller: NSFetchedResultsController,
         didChangeObject anObject: AnyObject,
-        atIndexPath indexPath: NSIndexPath!,
+        atIndexPath indexPath: NSIndexPath?,
         forChangeType type: NSFetchedResultsChangeType,
-        newIndexPath: NSIndexPath!) {
+        newIndexPath: NSIndexPath?) {
             switch type {
             case .Insert:
-                tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
+                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
             case .Delete:
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
             case .Update:
-                let cell = tableView.cellForRowAtIndexPath(indexPath) as VoiceTableViewCell
-                let voice = fetchedResultsController.objectAtIndexPath(indexPath) as Voice
+                let cell = tableView.cellForRowAtIndexPath(indexPath!) as! VoiceTableViewCell
+                let voice = fetchedResultsController.objectAtIndexPath(indexPath!) as! Voice
                 configureCell(cell, forVoice: voice)
             case .Move:
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Automatic)
+                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
             default:
                 break
             }
@@ -555,16 +554,16 @@ extension VoicesTableViewController: UISearchControllerDelegate {
 extension VoicesTableViewController: UISearchResultsUpdating {
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchResults = self.fetchedResultsController.fetchedObjects as [Voice]
+        let searchResults = self.fetchedResultsController.fetchedObjects as! [Voice]
         
         let whitespaceCharacterSet = NSCharacterSet.whitespaceCharacterSet()
         let strippedString = searchController.searchBar.text.stringByTrimmingCharactersInSet(whitespaceCharacterSet)
         let predicate = NSPredicate(format:
             "SELF.subject contains[c] %@", strippedString)
         
-        let filteredResults = searchResults.filter { predicate!.evaluateWithObject($0) }
+        let filteredResults = searchResults.filter { predicate.evaluateWithObject($0) }
         
-        let searchResultsController = searchController.searchResultsController as VoiceSearchResultsController
+        let searchResultsController = searchController.searchResultsController as! VoiceSearchResultsController
         searchResultsController.filteredVoices = filteredResults
         searchResultsController.tableView.reloadData()
     }
