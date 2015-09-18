@@ -30,17 +30,23 @@ class AudioSessionHelper {
     
     class func setupSessionActive(active: Bool, catagory: String = AVAudioSessionCategoryPlayback) {
         let session = AVAudioSession.sharedInstance()
-        var error: NSError?
         if active {
-            if !session.setCategory(catagory, error: &error) {
-                println("Could not set session category: \(error)")
+            do {
+                try session.setCategory(catagory)
+            } catch {
+                debugPrint("Could not set session category: \(error)")
             }
-            if !session.setActive(true, error: &error) {
-                println("Could not activate session: \(error)")
+            
+            do {
+                try session.setActive(true)
+            } catch {
+                debugPrint("Could not activate session: \(error)")
             }
         } else {
-            if !session.setActive(false, withOptions: .OptionNotifyOthersOnDeactivation, error: &error) {
-                println("Could not deactivate session: \(error)")
+            do {
+                try session.setActive(false, withOptions: .NotifyOthersOnDeactivation)
+            } catch {
+                ("Could not deactivate session: \(error)")
             }
         }
     }

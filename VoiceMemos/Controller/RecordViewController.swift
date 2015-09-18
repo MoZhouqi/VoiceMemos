@@ -134,43 +134,40 @@ class RecordViewController: UIViewController {
         
         session.requestRecordPermission {granted in
             if granted {
-                println("Recording permission has been granted")
-                let recordSettings = [
-                    kAudioFormatLinearPCM: AVFormatIDKey,
-                    44100.0: AVSampleRateKey,
-                    2: AVNumberOfChannelsKey,
-                    16: AVLinearPCMBitDepthKey,
-                    false: AVLinearPCMIsBigEndianKey,
-                    false: AVLinearPCMIsFloatKey,
+                debugPrint("Recording permission has been granted")
+                let recordSettings: [String : AnyObject]  = [
+                    AVFormatIDKey : NSNumber(unsignedInt: kAudioFormatLinearPCM),
+                    AVSampleRateKey : 44100.0,
+                    AVNumberOfChannelsKey : 2,
+                    AVLinearPCMBitDepthKey : 16,
+                    AVLinearPCMIsBigEndianKey : false,
+                    AVLinearPCMIsFloatKey : false,
                 ]
-                var error: NSError?
-                self.audioRecorder = AVAudioRecorder(URL: url, settings: recordSettings as [NSObject : AnyObject], error: &error)
-                if let err = error {
-                    println("Could not initialize recorder: \(err)")
+                self.audioRecorder = try? AVAudioRecorder(URL: url, settings: recordSettings)
+                guard let recorder = self.audioRecorder else {
+                    return
                 }
-                if let recorder = self.audioRecorder {
-                    recorder.delegate = delegate
-                    recorder.meteringEnabled = true
-                    AudioSessionHelper.postStartAudioNotificaion(recorder)
-                    self.delay(0.8) {
-                        AudioSessionHelper.setupSessionActive(true, catagory: AVAudioSessionCategoryRecord)
-                        if recorder.prepareToRecord() {
-                            recorder.recordForDuration(self.recordDuration)
-                            println("Start recording")
-                            
-                            NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleInterruption:", name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
-                            
-                            self.updateRecorderCurrentTimeAndMeters()
-                            self.meterTimer = NSTimer.scheduledTimerWithTimeInterval(0.1,
-                                target: self,
-                                selector: "updateRecorderCurrentTimeAndMeters",
-                                userInfo: nil,
-                                repeats: true)
-                        }
+                recorder.delegate = delegate
+                recorder.meteringEnabled = true
+                AudioSessionHelper.postStartAudioNotificaion(recorder)
+                self.delay(0.8) {
+                    AudioSessionHelper.setupSessionActive(true, catagory: AVAudioSessionCategoryRecord)
+                    if recorder.prepareToRecord() {
+                        recorder.recordForDuration(self.recordDuration)
+                        debugPrint("Start recording")
+                        
+                        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleInterruption:", name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
+                        
+                        self.updateRecorderCurrentTimeAndMeters()
+                        self.meterTimer = NSTimer.scheduledTimerWithTimeInterval(0.1,
+                            target: self,
+                            selector: "updateRecorderCurrentTimeAndMeters",
+                            userInfo: nil,
+                            repeats: true)
                     }
                 }
             } else {
-                println("Recording permission has been denied")
+                debugPrint("Recording permission has been denied")
             }
         }
     }

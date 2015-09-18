@@ -1,10 +1,10 @@
 PODS:
-  - KMPlaceholderTextView (0.1.2)
+  - KMPlaceholderTextView (1.0.0)
 
 DEPENDENCIES:
-  - KMPlaceholderTextView (~> 0.1.2)
+  - KMPlaceholderTextView (~> 1.0.0)
 
 SPEC CHECKSUMS:
-  KMPlaceholderTextView: cd2ff604e9fad9b42d1e690de1060c98d3d129f2
+  KMPlaceholderTextView: 08514547996d3bc7ce1b57e296af2ce8e832c0f6
 
-COCOAPODS: 0.36.4
+COCOAPODS: 0.38.2

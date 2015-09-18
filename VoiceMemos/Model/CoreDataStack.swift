@@ -32,34 +32,33 @@ class CoreDataStack {
         let storeURL = documentsURL.URLByAppendingPathComponent("VoiceMemos.sqlite")
         
         let options = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
-        
-        var error: NSError? = nil
-        store = psc.addPersistentStoreWithType(NSSQLiteStoreType,
-            configuration: nil,
-            URL: storeURL,
-            options: options,
-            error:&error)
-        
-        if store == nil {
-            println("Error adding persistent store: \(error)")
+        do {
+            try store = psc.addPersistentStoreWithType(NSSQLiteStoreType,
+                configuration: nil,
+                URL: storeURL,
+                options: options)
+        } catch {
+            debugPrint("Error adding persistent store: \(error)")
             abort()
         }
         
     }
     
     func saveContext() {
-        
-        var error: NSError? = nil
-        if context.hasChanges && !context.save(&error) {
-            println("Could not save: \(error), \(error?.userInfo)")
+        if context.hasChanges {
+            do {
+                try context.save()
+            }
+            catch {
+                debugPrint("Could not save: \(error)")
+            }
         }
-        
     }
     
     func applicationDocumentsDirectory() -> NSURL {
         
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as! NSURL
+        return urls[urls.count-1]
     }
     
 }

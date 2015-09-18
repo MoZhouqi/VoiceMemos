@@ -27,8 +27,8 @@ class KMVoiceRecordHUD: UIView {
         super.init(frame: frame)
         image = UIImage(named: "Mic")
     }
-    
-    required init(coder aDecoder: NSCoder) {
+
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         image = UIImage(named: "Mic")
     }

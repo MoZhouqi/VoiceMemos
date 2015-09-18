@@ -57,10 +57,7 @@ class DetailViewController: UIViewController {
         return formatter
         }()
     
-    var tmpStoreURL: NSURL {
-        let path = NSTemporaryDirectory().stringByAppendingPathComponent("tmpVoice.caf")
-        return NSURL.fileURLWithPath(path)!
-    }
+    let tmpStoreURL = NSURL.fileURLWithPath(NSTemporaryDirectory()).URLByAppendingPathComponent("tmpVoice.caf")
     
     // MARK: Constants
     
@@ -108,10 +105,9 @@ class DetailViewController: UIViewController {
     
     // MARK: Notification
     
-    func keyboardWasShown(notification: NSNotification)
-    {
+    func keyboardWasShown(notification: NSNotification) {
         let info = notification.userInfo
-        var kbRect = info![UIKeyboardFrameEndUserInfoKey]!.CGRectValue()
+        var kbRect = info![UIKeyboardFrameEndUserInfoKey]!.CGRectValue
         kbRect = view.convertRect(kbRect, fromView: nil)
         
         var contentInsets = tableView.contentInset
@@ -126,8 +122,7 @@ class DetailViewController: UIViewController {
         }
     }
     
-    func keyboardWillBeHidden(notification: NSNotification)
-    {
+    func keyboardWillBeHidden(notification: NSNotification) {
         var contentInsets = tableView.contentInset
         contentInsets.bottom = 0.0
         tableView.contentInset = contentInsets
@@ -204,22 +199,19 @@ class DetailViewController: UIViewController {
                 playback.state = .Play
             }
         } else {
-            var error: NSError?
-            
-            let url: NSURL? = {
+            let url: NSURL = {
                 if self.recordingHasUpdates {
                     return self.tmpStoreURL
                 } else {
                     return self.directoryURL.URLByAppendingPathComponent(self.voice.filename!)
                 }
                 }()
-            
-            playback.audioPlayer = AVAudioPlayer(contentsOfURL: url, error: &error)
-            if error == nil {
+            do {
+                try playback.audioPlayer = AVAudioPlayer(contentsOfURL: url)
                 playback.audioPlayer!.delegate = self
                 playback.audioPlayer!.prepareToPlay()
                 playback.state = .Play
-            } else {
+            } catch {
                 let alertController = UIAlertController(title: nil, message: "The audio file seems to be corrupted. Do you want to retake?", preferredStyle: .Alert)
                 
                 let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
@@ -234,6 +226,7 @@ class DetailViewController: UIViewController {
                 
                 presentViewController(alertController, animated: true, completion: nil)
             }
+            
         }
     }
     
@@ -300,7 +293,7 @@ class DetailViewController: UIViewController {
                 playback.timer = nil
                 playback.audioPlayer?.pause()
                 UIDevice.currentDevice().proximityMonitoringEnabled = false
-                if deactive.0 {
+                if deactive {
                     AudioSessionHelper.setupSessionActive(false)
                 }
                 playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
@@ -317,7 +310,7 @@ class DetailViewController: UIViewController {
                 playback.timer = nil
                 playback.audioPlayer = nil
                 UIDevice.currentDevice().proximityMonitoringEnabled = false
-                if deactive.0 {
+                if deactive {
                     AudioSessionHelper.setupSessionActive(false)
                 }
                 playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
@@ -344,11 +337,8 @@ class DetailViewController: UIViewController {
                 return self.directoryURL.URLByAppendingPathComponent(filename)
             }
             }()
-        NSFileManager.defaultManager().removeItemAtURL(storeURL, error: nil)
-        var error: NSError?
-        if !NSFileManager.defaultManager().moveItemAtURL(tmpStoreURL, toURL: storeURL, error: &error) {
-            println("Error moving file: \(error)")
-        }
+        _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL)
+        _ = try? NSFileManager.defaultManager().moveItemAtURL(tmpStoreURL, toURL: storeURL)
     }
     
     func updateSubject(textView: KMPlaceholderTextView) {
@@ -396,7 +386,7 @@ class DetailViewController: UIViewController {
 
 extension DetailViewController: AVAudioRecorderDelegate {
     
-    func audioRecorderDidFinishRecording(recorder: AVAudioRecorder!, successfully flag: Bool) {
+    func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
             recordingHasUpdates = true
             playback.playButton.hidden = false
@@ -409,9 +399,8 @@ extension DetailViewController: AVAudioRecorderDelegate {
             voice.duration = durationInSeconds
         }
     }
-    
-    func audioRecorderEncodeErrorDidOccur(recorder: AVAudioRecorder!, error: NSError!) {
-        assert(error == nil, "Encode Error occurred! Error: \(error)")
+    func audioRecorderEncodeErrorDidOccur(recorder: AVAudioRecorder, error: NSError?) {
+        assertionFailure("Encode Error occurred! Error: \(error)")
     }
     
 }
@@ -420,12 +409,12 @@ extension DetailViewController: AVAudioRecorderDelegate {
 
 extension DetailViewController: AVAudioPlayerDelegate {
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer!, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
         playback.state = .Finish
     }
     
-    func audioPlayerDecodeErrorDidOccur(player: AVAudioPlayer!, error: NSError!) {
-        assert(error == nil, "Decode Error occurred! Error: \(error)")
+    func audioPlayerDecodeErrorDidOccur(player: AVAudioPlayer, error: NSError?) {
+        assertionFailure("Decode Error occurred! Error: \(error)")
     }
     
 }
@@ -499,7 +488,7 @@ extension DetailViewController: UITableViewDataSource {
         default:
             break
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier, forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier, forIndexPath: indexPath)
         
         if let subheadlineTableViewCell = cell as? SubheadlineTableViewCell {
             subheadlineTableViewCell.updateFonts()

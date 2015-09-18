@@ -26,16 +26,17 @@ class SplitViewController: UISplitViewController {
 
 extension SplitViewController: UISplitViewControllerDelegate {
     
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController!, ontoPrimaryViewController primaryViewController: UIViewController!) -> Bool {
-        if let recordViewController = (secondaryViewController as? UINavigationController)?.visibleViewController as? DetailViewController {
+    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
+        let recordViewController = (secondaryViewController as? UINavigationController)?.visibleViewController as? DetailViewController
+        if recordViewController != nil {
             return false
         }
         return true
     }
     
-    func splitViewController(splitViewController: UISplitViewController, separateSecondaryViewControllerFromPrimaryViewController primaryViewController: UIViewController!) -> UIViewController? {
-        if let vc = (primaryViewController as? UINavigationController)?.visibleViewController as? VoicesTableViewController {
-            let viewController = storyboard?.instantiateViewControllerWithIdentifier("NoVoiceSelected") as! UIViewController
+    func splitViewController(splitViewController: UISplitViewController, separateSecondaryViewControllerFromPrimaryViewController primaryViewController: UIViewController) -> UIViewController? {
+        if (primaryViewController as? UINavigationController)?.visibleViewController as? VoicesTableViewController != nil {
+            let viewController = storyboard?.instantiateViewControllerWithIdentifier("NoVoiceSelected")
             return viewController
         } else {
             return nil

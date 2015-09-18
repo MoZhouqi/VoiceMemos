@@ -42,7 +42,7 @@ Simply add the following line to your Podfile:
 platform :ios, '8.0' 
 use_frameworks!
 
-pod 'KMPlaceholderTextView', '~> 0.1.1' 
+pod 'KMPlaceholderTextView', '~> 1.0.0' 
 ```
 
 Then, run the following command:
@@ -51,10 +51,27 @@ Then, run the following command:
 $ pod install
 ```
 
+### Carthage
+
+[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that automates the process of adding frameworks to your Cocoa application.
+
+You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
+
+```bash
+$ brew update
+$ brew install carthage
+```
+
+To integrate KMPlaceholderTextView into your Xcode project using Carthage, specify it in your `Cartfile`:
+
+```ogdl
+github "MoZhouqi/KMPlaceholderTextView" >= 1.0
+```
+
 ## Requirements
 
 - iOS 7.0+
-- Xcode 6.3
+- Xcode 7
 
 ## License
 

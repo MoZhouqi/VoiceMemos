@@ -78,7 +78,7 @@ public class KMCircularProgressView: UIView {
             case .Pause:
                 var rect = CGRect(origin: CGPoint(x: layerBounds.width * 0.1, y: 0), size: CGSize(width: layerBounds.width * 0.2, height: layerBounds.height))
                 let path = UIBezierPath(rect: rect)
-                rect.offset(dx: layerBounds.width * 0.6, dy: 0)
+                rect.offsetInPlace(dx: layerBounds.width * 0.6, dy: 0)
                 path.appendPath(UIBezierPath(rect: rect))
                 return path.CGPath
             case .Stop:
