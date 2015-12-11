@@ -29,7 +29,7 @@
 		CD1273FB1AA7EBEC00D9D393 /* KMOverlayPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273F91AA7EBEC00D9D393 /* KMOverlayPresentationController.swift */; };
 		CD1273FC1AA7EBEC00D9D393 /* KMOverlayTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273FA1AA7EBEC00D9D393 /* KMOverlayTransitioner.swift */; };
 		CD1273FF1AA7EBF600D9D393 /* AudioSessionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1273FE1AA7EBF600D9D393 /* AudioSessionHelper.swift */; };
-		F245F3FAC841E7AA0942992B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0588E348A241A320B4A31BFF /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		F245F3FAC841E7AA0942992B /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0588E348A241A320B4A31BFF /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
