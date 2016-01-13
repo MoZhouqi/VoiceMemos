@@ -11,7 +11,7 @@ import AVFoundation
 import Foundation
 import CoreData
 
-class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, UIGestureRecognizerDelegate {
+class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     
     // MARK: Property
     
@@ -450,6 +450,21 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate, U
         _ = try? NSFileManager.defaultManager().removeItemAtURL(removeFileURL)
         coreDataStack.context.deleteObject(voice)
         coreDataStack.saveContext()
+    }
+    
+}
+
+// MARK: Gesture Recognizer Delegate
+
+extension VoicesTableViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        // Ignore interactive pop gesture when there is only one view controller on the navigation stack
+        if navigationController?.viewControllers.count <= 1 {
+            return false
+        }
+        return true
     }
     
 }
