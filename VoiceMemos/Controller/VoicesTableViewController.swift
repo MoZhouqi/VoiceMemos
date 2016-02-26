@@ -294,44 +294,32 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let voice = self.voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
         
         let deleteAction = UITableViewRowAction(style: .Normal, title: "Delete"){ action, index in
-            
-            dispatch_async(dispatch_get_main_queue()){
-                let voice = self.voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
-                
-                if tableView == self.resultsTableController.tableView {
-                    self.resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
-                    self.resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                }
-        
-                self.deleteVoiceInPersistentStore(voice)
+            if tableView == self.resultsTableController.tableView {
+                self.resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
+                self.resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             }
             
+            self.deleteVoiceInPersistentStore(voice)
         }
         
         let shareAction = UITableViewRowAction(style: .Normal, title: "Share") { action, index in
-            
-            dispatch_async(dispatch_get_main_queue()){
-                
-                let voice = self.voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
-                let audioPath = self.directoryURL.URLByAppendingPathComponent(voice.filename!)
-                let activityView = UIActivityViewController(activityItems: [audioPath], applicationActivities: nil)
-                let currentCell = tableView.cellForRowAtIndexPath(indexPath)
-                activityView.popoverPresentationController?.sourceView = tableView.cellForRowAtIndexPath(indexPath)
-                activityView.popoverPresentationController?.sourceRect =
-                    CGRectMake(currentCell!.frame.width/2, currentCell!.frame.height, 0, 0)
-                activityView.popoverPresentationController?.permittedArrowDirections = .Up
-                self.presentViewController(activityView, animated: true, completion: nil)
-                
-            }
-            
+            let audioPath = self.directoryURL.URLByAppendingPathComponent(voice.filename!)
+            let activityView = UIActivityViewController(activityItems: [audioPath], applicationActivities: nil)
+            let currentCell = tableView.cellForRowAtIndexPath(indexPath)
+            activityView.popoverPresentationController?.sourceView = currentCell
+            activityView.popoverPresentationController?.sourceRect =
+                CGRectMake(currentCell!.frame.width/2, currentCell!.frame.height, 0, 0)
+            activityView.popoverPresentationController?.permittedArrowDirections = .Up
+            self.presentViewController(activityView, animated: true, completion: nil)
         }
         
         deleteAction.backgroundColor = UIColor.redColor()
         shareAction.backgroundColor = UIColor.blueColor()
         
-        return [shareAction, deleteAction]
+        return [deleteAction, shareAction]
     }
   
     // MARK: - Playback Control
