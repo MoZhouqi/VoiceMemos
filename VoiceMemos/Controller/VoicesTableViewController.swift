@@ -276,23 +276,6 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         return true
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        switch editingStyle {
-        case .Delete:
-            let voice = voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
-            
-            if tableView == resultsTableController.tableView {
-                resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
-                resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            }
-            
-            deleteVoiceInPersistentStore(voice)
-            
-        default:
-            break
-        }
-    }
-    
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -310,10 +293,35 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         }
     }
     
-    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return .Delete
+    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let voice = self.voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
+        
+        let deleteAction = UITableViewRowAction(style: .Normal, title: "Delete") { action, index in
+            if tableView == self.resultsTableController.tableView {
+                self.resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
+                self.resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            }
+            
+            self.deleteVoiceInPersistentStore(voice)
+        }
+        
+        let shareAction = UITableViewRowAction(style: .Normal, title: "Share") { action, index in
+            let audioPath = self.directoryURL.URLByAppendingPathComponent(voice.filename!)
+            let activityView = UIActivityViewController(activityItems: [audioPath], applicationActivities: nil)
+            let currentCell = tableView.cellForRowAtIndexPath(indexPath)
+            activityView.popoverPresentationController?.sourceView = currentCell
+            activityView.popoverPresentationController?.sourceRect =
+                CGRectMake(currentCell!.frame.width/2, currentCell!.frame.height, 0, 0)
+            activityView.popoverPresentationController?.permittedArrowDirections = .Up
+            self.presentViewController(activityView, animated: true, completion: nil)
+        }
+        
+        deleteAction.backgroundColor = UIColor.redColor()
+        shareAction.backgroundColor = UIColor.blueColor()
+        
+        return [deleteAction, shareAction]
     }
-    
+  
     // MARK: - Playback Control
     
     class KMPlayback {
