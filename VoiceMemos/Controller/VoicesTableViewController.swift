@@ -173,6 +173,8 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        setEditing(false, animated: true)
+        
         if segue.identifier == "Add Voice" || segue.identifier == "Change Voice" {
             
             let detailViewController = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
@@ -301,19 +303,15 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
                 self.resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
                 self.resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
             }
-            
             self.deleteVoiceInPersistentStore(voice)
         }
         
         let shareAction = UITableViewRowAction(style: .Normal, title: "Share") { action, index in
             let audioPath = self.directoryURL.URLByAppendingPathComponent(voice.filename!)
-            let activityView = UIActivityViewController(activityItems: [audioPath], applicationActivities: nil)
-            let currentCell = tableView.cellForRowAtIndexPath(indexPath)
-            activityView.popoverPresentationController?.sourceView = currentCell
-            activityView.popoverPresentationController?.sourceRect =
-                CGRectMake(currentCell!.frame.width/2, currentCell!.frame.height, 0, 0)
-            activityView.popoverPresentationController?.permittedArrowDirections = .Up
-            self.presentViewController(activityView, animated: true, completion: nil)
+            let activityViewController = UIActivityViewController(activityItems: [audioPath], applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = tableView
+            activityViewController.popoverPresentationController?.sourceRect = tableView.rectForRowAtIndexPath(indexPath)
+            self.presentViewController(activityViewController, animated: true, completion: nil)
         }
         
         deleteAction.backgroundColor = UIColor.redColor()
@@ -321,7 +319,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         
         return [deleteAction, shareAction]
     }
-  
+    
     // MARK: - Playback Control
     
     class KMPlayback {
