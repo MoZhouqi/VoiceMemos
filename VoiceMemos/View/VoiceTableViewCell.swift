@@ -26,15 +26,15 @@ class VoiceTableViewCell: UITableViewCell {
         let CellTrailingToContentViewTrailingConstant: CGFloat = 48.0
         
         // Minus the left/right padding for the label
-        let maxLayoutWidth = CGRectGetWidth(tableView.frame) - leadingConstraint.constant - trailingConstraint.constant - CellTrailingToContentViewTrailingConstant
+        let maxLayoutWidth = tableView.frame.width - leadingConstraint.constant - trailingConstraint.constant - CellTrailingToContentViewTrailingConstant
         return maxLayoutWidth
     }
     
     func updateFonts()
     {
-        titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
-        dateLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleFootnote)
-        durationLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)
+        dateLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.footnote)
+        durationLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.caption1)
     }
     
     override func layoutSubviews() {

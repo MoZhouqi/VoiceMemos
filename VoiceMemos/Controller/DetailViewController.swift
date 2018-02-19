@@ -15,7 +15,7 @@ import KMPlaceholderTextView
 // MARK: Protocol - DetailViewControllerDelegate
 
 protocol DetailViewControllerDelegate : class {
-    func didFinishViewController(detailViewController: DetailViewController, didSave: Bool)
+    func didFinishViewController(_ detailViewController: DetailViewController, didSave: Bool)
 }
 
 // MARK: DetailViewController
@@ -30,9 +30,9 @@ class DetailViewController: UIViewController {
     var voice: Voice!
     var currentAudioPlayer: AVAudioPlayer?
     weak var delegate: DetailViewControllerDelegate?
-    var directoryURL: NSURL!
+    var directoryURL: URL!
     var voiceHasChanges: Bool {
-        if isViewLoaded() && view.window != nil {
+        if isViewLoaded && view.window != nil {
             if voice.filename != nil && context.hasChanges {
                 return true
             }
@@ -50,14 +50,14 @@ class DetailViewController: UIViewController {
     var recordingHasUpdates = false
     var overlayTransitioningDelegate: KMOverlayTransitioningDelegate?
     
-    lazy var dateFormatter: NSDateFormatter = {
-        var formatter = NSDateFormatter()
-        formatter.dateStyle = .MediumStyle
-        formatter.timeStyle = .ShortStyle
+    lazy var dateFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
         return formatter
         }()
     
-    let tmpStoreURL = NSURL.fileURLWithPath(NSTemporaryDirectory()).URLByAppendingPathComponent("tmpVoice.caf")
+    let tmpStoreURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("tmpVoice.caf")
     
     // MARK: Constants
     
@@ -78,81 +78,81 @@ class DetailViewController: UIViewController {
         tableView.estimatedRowHeight = 50.0
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWasShown:", name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleInterruption:", name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "audioObjectWillStart:", name: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "proximityStateDidChange:", name: UIDeviceProximityStateDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(DetailViewController.keyboardWasShown(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(DetailViewController.keyboardWillBeHidden(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(DetailViewController.handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+        NotificationCenter.default.addObserver(self, selector: #selector(DetailViewController.audioObjectWillStart(_:)), name: NSNotification.Name(rawValue: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(DetailViewController.proximityStateDidChange(_:)), name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if playback.audioPlayer?.playing == true {
-            playback.state = .Default(deactive: true)
+        if playback.audioPlayer?.isPlaying == true {
+            playback.state = .default(deactive: true)
         } else {
-            playback.state = .Default(deactive: false)
+            playback.state = .default(deactive: false)
         }
         
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardDidShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIDeviceProximityStateDidChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
     }
     
     // MARK: Notification
     
-    func keyboardWasShown(notification: NSNotification) {
+    func keyboardWasShown(_ notification: Notification) {
         let info = notification.userInfo
-        var kbRect = info![UIKeyboardFrameEndUserInfoKey]!.CGRectValue
-        kbRect = view.convertRect(kbRect, fromView: nil)
+        var kbRect = (info![UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue
+        kbRect = view.convert(kbRect!, from: nil)
         
         var contentInsets = tableView.contentInset
-        contentInsets.bottom = kbRect.size.height
+        contentInsets.bottom = (kbRect?.size.height)!
         tableView.contentInset = contentInsets
         tableView.scrollIndicatorInsets = contentInsets
         
         var aRect = view.frame
-        aRect.size.height -= kbRect.size.height
-        if !CGRectContainsPoint(aRect, subjectTextView.frame.origin) {
+        aRect.size.height -= (kbRect?.size.height)!
+        if !aRect.contains(subjectTextView.frame.origin) {
             tableView.scrollRectToVisible(subjectTextView.frame, animated: true)
         }
     }
     
-    func keyboardWillBeHidden(notification: NSNotification) {
+    func keyboardWillBeHidden(_ notification: Notification) {
         var contentInsets = tableView.contentInset
         contentInsets.bottom = 0.0
         tableView.contentInset = contentInsets
         tableView.scrollIndicatorInsets = contentInsets
     }
     
-    func handleInterruption(notification: NSNotification) {
+    func handleInterruption(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as! UInt
-            if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
-                if playback.audioPlayer?.playing == true {
-                    playback.state = .Pause(deactive: true)
+            if interruptionType == AVAudioSessionInterruptionType.began.rawValue {
+                if playback.audioPlayer?.isPlaying == true {
+                    playback.state = .pause(deactive: true)
                 }
             }
         }
     }
     
-    func audioObjectWillStart(notification: NSNotification) {
+    func audioObjectWillStart(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            if let audioObject: AnyObject = userInfo[AudioSessionHelper.Constants.Notification.AudioObjectWillStart.UserInfo.AudioObjectKey] {
-                if playback.audioPlayer != audioObject as? AVAudioPlayer && playback.audioPlayer?.playing == true {
-                    playback.state = .Pause(deactive: false)
+            if let audioObject: AnyObject = userInfo[AudioSessionHelper.Constants.Notification.AudioObjectWillStart.UserInfo.AudioObjectKey] as AnyObject? {
+                if playback.audioPlayer != audioObject as? AVAudioPlayer && playback.audioPlayer?.isPlaying == true {
+                    playback.state = .pause(deactive: false)
                 }
             }
         }
     }
     
-    func proximityStateDidChange(notification: NSNotification) {
-        if playback.audioPlayer?.playing == true {
-            if UIDevice.currentDevice().proximityState {
+    func proximityStateDidChange(_ notification: Notification) {
+        if playback.audioPlayer?.isPlaying == true {
+            if UIDevice.current.proximityState {
                 AudioSessionHelper.setupSessionActive(true, catagory: AVAudioSessionCategoryPlayAndRecord)
             } else {
                 AudioSessionHelper.setupSessionActive(true)
@@ -162,75 +162,75 @@ class DetailViewController: UIViewController {
     
     // MARK: Target Action
     
-    @IBAction func unwindToDetailViewController(segue: UIStoryboardSegue) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func unwindToDetailViewController(_ segue: UIStoryboardSegue) {
+        dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func hideKeyboard(sender: UITapGestureRecognizer) {
+    @IBAction func hideKeyboard(_ sender: UITapGestureRecognizer) {
         tableView.endEditing(true)
     }
     
-    @IBAction func datePickerValueChanged(datePicker: UIDatePicker) {
+    @IBAction func datePickerValueChanged(_ datePicker: UIDatePicker) {
         voice.date = datePicker.date
-        dateLabel.text = dateFormatter.stringFromDate(datePicker.date)
+        dateLabel.text = dateFormatter.string(from: datePicker.date)
     }
     
-    @IBAction func progressSliderTapped(sender: UITapGestureRecognizer) {
+    @IBAction func progressSliderTapped(_ sender: UITapGestureRecognizer) {
         if let slider = sender.view as? UISlider {
-            let point = sender.locationInView(slider)
+            let point = sender.location(in: slider)
             let percentage = Float(point.x / slider.bounds.width)
             let value = slider.minimumValue + percentage * (slider.maximumValue - slider.minimumValue)
             slider.value = value
-            slider.sendActionsForControlEvents(.ValueChanged)
+            slider.sendActions(for: .valueChanged)
         }
     }
     
-    @IBAction func progressSliderValueChanged(sender: UISlider) {
+    @IBAction func progressSliderValueChanged(_ sender: UISlider) {
         if let audioPlayer = playback.audioPlayer {
-            audioPlayer.currentTime = NSTimeInterval(sender.value) * audioPlayer.duration
+            audioPlayer.currentTime = TimeInterval(sender.value) * audioPlayer.duration
         }
     }
     
-    @IBAction func playAudioButtonTapped(sender: AnyObject) {
+    @IBAction func playAudioButtonTapped(_ sender: AnyObject) {
         if let player = playback.audioPlayer {
-            if player.playing {
-                playback.state = .Pause(deactive: true)
+            if player.isPlaying {
+                playback.state = .pause(deactive: true)
             } else {
-                playback.state = .Play
+                playback.state = .play
             }
         } else {
-            let url: NSURL = {
+            let url: URL = {
                 if self.recordingHasUpdates {
                     return self.tmpStoreURL
                 } else {
-                    return self.directoryURL.URLByAppendingPathComponent(self.voice.filename!)
+                    return self.directoryURL.appendingPathComponent(self.voice.filename!)
                 }
                 }()
             do {
-                try playback.audioPlayer = AVAudioPlayer(contentsOfURL: url)
+                try playback.audioPlayer = AVAudioPlayer(contentsOf: url)
                 playback.audioPlayer!.delegate = self
                 playback.audioPlayer!.prepareToPlay()
-                playback.state = .Play
+                playback.state = .play
             } catch {
-                let alertController = UIAlertController(title: nil, message: "The audio file seems to be corrupted. Do you want to retake?", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: nil, message: "The audio file seems to be corrupted. Do you want to retake?", preferredStyle: .alert)
                 
-                let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
                     
                 }
                 alertController.addAction(cancelAction)
                 
-                let OKAction = UIAlertAction(title: "Retake", style: .Destructive) { _ in
-                    self.performSegueWithIdentifier("Record", sender: self)
+                let OKAction = UIAlertAction(title: "Retake", style: .destructive) { _ in
+                    self.performSegue(withIdentifier: "Record", sender: self)
                 }
                 alertController.addAction(OKAction)
                 
-                presentViewController(alertController, animated: true, completion: nil)
+                present(alertController, animated: true, completion: nil)
             }
             
         }
     }
     
-    @IBAction func saveVoiceButtonTapped(sender: AnyObject) {
+    @IBAction func saveVoiceButtonTapped(_ sender: AnyObject) {
         updateVoice()
         if voice.filename != nil {
             delegate?.didFinishViewController(self, didSave: true)
@@ -245,9 +245,9 @@ class DetailViewController: UIViewController {
         var playButton: UIButton!
         var progressSlider: UISlider!
         var audioPlayer: AVAudioPlayer?
-        var timer: NSTimer?
+        var timer: Timer?
         
-        var state: KMPlaybackState = .Default(deactive: false) {
+        var state: KMPlaybackState = .default(deactive: false) {
             didSet {
                 state.changePlaybackState(self)
             }
@@ -261,59 +261,59 @@ class DetailViewController: UIViewController {
     }
     
     enum KMPlaybackState {
-        case Play
-        case Pause(deactive: Bool)
-        case Finish
-        case Default(deactive: Bool)
+        case play
+        case pause(deactive: Bool)
+        case finish
+        case `default`(deactive: Bool)
         
-        func changePlaybackState(playback: KMPlayback) {
+        func changePlaybackState(_ playback: KMPlayback) {
             switch self {
-            case .Play:
+            case .play:
                 if let player = playback.audioPlayer {
                     AudioSessionHelper.postStartAudioNotificaion(player)
                     playback.timer?.invalidate()
-                    playback.timer = NSTimer(
+                    playback.timer = Timer(
                         timeInterval: 0.1,
                         target: playback,
-                        selector: "updateprogressSliderValue",
+                        selector: #selector(KMPlayback.updateprogressSliderValue),
                         userInfo: nil,
                         repeats: true)
-                    NSRunLoop.currentRunLoop().addTimer(playback.timer!, forMode: NSRunLoopCommonModes)
+                    RunLoop.current.add(playback.timer!, forMode: RunLoopMode.commonModes)
                     AudioSessionHelper.setupSessionActive(true)
-                    if !player.playing {
-                        player.currentTime = NSTimeInterval(playback.progressSlider.value) * player.duration
+                    if !player.isPlaying {
+                        player.currentTime = TimeInterval(playback.progressSlider.value) * player.duration
                         player.play()
                     }
-                    UIDevice.currentDevice().proximityMonitoringEnabled = true
-                    playback.playButton.setImage(UIImage(named: "Pause"), forState: .Normal)
+                    UIDevice.current.isProximityMonitoringEnabled = true
+                    playback.playButton.setImage(UIImage(named: "Pause"), for: UIControlState())
                     playback.updateprogressSliderValue()
                 }
-            case .Pause(let deactive):
+            case .pause(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer?.pause()
-                UIDevice.currentDevice().proximityMonitoringEnabled = false
+                UIDevice.current.isProximityMonitoringEnabled = false
                 if deactive {
                     AudioSessionHelper.setupSessionActive(false)
                 }
-                playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
+                playback.playButton.setImage(UIImage(named: "Play"), for: UIControlState())
                 playback.updateprogressSliderValue()
-            case .Finish:
+            case .finish:
                 playback.timer?.invalidate()
                 playback.timer = nil
-                UIDevice.currentDevice().proximityMonitoringEnabled = false
+                UIDevice.current.isProximityMonitoringEnabled = false
                 AudioSessionHelper.setupSessionActive(false)
-                playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
+                playback.playButton.setImage(UIImage(named: "Play"), for: UIControlState())
                 playback.progressSlider.value = 1.0
-            case .Default(let deactive):
+            case .default(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer = nil
-                UIDevice.currentDevice().proximityMonitoringEnabled = false
+                UIDevice.current.isProximityMonitoringEnabled = false
                 if deactive {
                     AudioSessionHelper.setupSessionActive(false)
                 }
-                playback.playButton.setImage(UIImage(named: "Play"), forState: .Normal)
+                playback.playButton.setImage(UIImage(named: "Play"), for: UIControlState())
                 playback.progressSlider.value = 0.0
             }
         }
@@ -324,24 +324,24 @@ class DetailViewController: UIViewController {
     //MARK: Other
     
     func generateVoiceFileName() -> String {
-        return NSProcessInfo.processInfo().globallyUniqueString + ".caf"
+        return ProcessInfo.processInfo.globallyUniqueString + ".caf"
     }
     
     func saveReocrding() {
-        let storeURL: NSURL = {
+        let storeURL: URL = {
             if let filename = self.voice.filename {
-                return self.directoryURL.URLByAppendingPathComponent(filename)
+                return self.directoryURL.appendingPathComponent(filename)
             } else {
                 let filename = self.generateVoiceFileName()
                 self.voice.filename = filename
-                return self.directoryURL.URLByAppendingPathComponent(filename)
+                return self.directoryURL.appendingPathComponent(filename)
             }
             }()
-        _ = try? NSFileManager.defaultManager().removeItemAtURL(storeURL)
-        _ = try? NSFileManager.defaultManager().moveItemAtURL(tmpStoreURL, toURL: storeURL)
+        _ = try? FileManager.default.removeItem(at: storeURL)
+        _ = try? FileManager.default.moveItem(at: tmpStoreURL, to: storeURL)
     }
     
-    func updateSubject(textView: KMPlaceholderTextView) {
+    func updateSubject(_ textView: KMPlaceholderTextView) {
         if !textView.text.isEmpty {
             voice.subject = textView.text
         } else {
@@ -361,21 +361,21 @@ class DetailViewController: UIViewController {
         animation.duration = 0.07
         animation.repeatCount = 4
         animation.autoreverses = true
-        animation.fromValue = NSValue(CGPoint: CGPointMake(recordButton.center.x - 10, recordButton.center.y))
-        animation.toValue = NSValue(CGPoint: CGPointMake(recordButton.center.x + 10, recordButton.center.y))
-        recordButton.layer.addAnimation(animation, forKey: "position")
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: recordButton.center.x - 10, y: recordButton.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: recordButton.center.x + 10, y: recordButton.center.y))
+        recordButton.layer.add(animation, forKey: "position")
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Record" {
-            playback.state = .Default(deactive: false)
+            playback.state = .default(deactive: false)
             
-            let recordViewController = segue.destinationViewController as! RecordViewController
+            let recordViewController = segue.destination as! RecordViewController
             recordViewController.configRecorderWithURL(tmpStoreURL, delegate: self)
             
             overlayTransitioningDelegate = KMOverlayTransitioningDelegate()
             transitioningDelegate = overlayTransitioningDelegate
-            recordViewController.modalPresentationStyle = .Custom
+            recordViewController.modalPresentationStyle = .custom
             recordViewController.transitioningDelegate = overlayTransitioningDelegate
         }
     }
@@ -386,20 +386,20 @@ class DetailViewController: UIViewController {
 
 extension DetailViewController: AVAudioRecorderDelegate {
     
-    func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
             recordingHasUpdates = true
-            playback.playButton.hidden = false
-            playback.progressSlider.hidden = false
-            recordButton.setTitle("", forState: .Normal)
+            playback.playButton.isHidden = false
+            playback.progressSlider.isHidden = false
+            recordButton.setTitle("", for: UIControlState())
             
-            let asset = AVURLAsset(URL: recorder.url, options: nil)
+            let asset = AVURLAsset(url: recorder.url, options: nil)
             let duration = asset.duration
             let durationInSeconds = Int(ceil(CMTimeGetSeconds(duration)))
-            voice.duration = durationInSeconds
+            voice.duration = NSNumber(value: durationInSeconds)
         }
     }
-    func audioRecorderEncodeErrorDidOccur(recorder: AVAudioRecorder, error: NSError?) {
+    func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         assertionFailure("Encode Error occurred! Error: \(error)")
     }
     
@@ -409,11 +409,11 @@ extension DetailViewController: AVAudioRecorderDelegate {
 
 extension DetailViewController: AVAudioPlayerDelegate {
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
-        playback.state = .Finish
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        playback.state = .finish
     }
     
-    func audioPlayerDecodeErrorDidOccur(player: AVAudioPlayer, error: NSError?) {
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         assertionFailure("Decode Error occurred! Error: \(error)")
     }
     
@@ -423,29 +423,29 @@ extension DetailViewController: AVAudioPlayerDelegate {
 
 extension DetailViewController: UITableViewDelegate {
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) {
             if cell.reuseIdentifier == Constants.TableViewCell.dateCellIdentifier {
                 toggleDatePickerForSelectedIndexPath(indexPath)
             } else {
-                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+                tableView.deselectRow(at: indexPath, animated: true)
             }
         }
     }
     
-    func toggleDatePickerForSelectedIndexPath(indexPath: NSIndexPath) {
-        let indexPaths = [NSIndexPath(forRow: indexPath.row + 1, inSection: indexPath.section)]
+    func toggleDatePickerForSelectedIndexPath(_ indexPath: IndexPath) {
+        let indexPaths = [IndexPath(row: indexPath.row + 1, section: indexPath.section)]
         tableView.beginUpdates()
         if dateToggle {
             dateToggle = false
-            dateLabel.textColor = UIColor.blackColor()
-            tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+            dateLabel.textColor = UIColor.black
+            tableView.deleteRows(at: indexPaths, with: .automatic)
         } else {
             dateToggle = true
             dateLabel.textColor = view.tintColor
-            tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+            tableView.insertRows(at: indexPaths, with: .automatic)
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
         tableView.endUpdates()
     }
     
@@ -455,11 +455,11 @@ extension DetailViewController: UITableViewDelegate {
 
 extension DetailViewController: UITableViewDataSource {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 1
@@ -472,7 +472,7 @@ extension DetailViewController: UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var resuseIdentifier = ""
         switch indexPath.section {
         case 0:
@@ -488,7 +488,7 @@ extension DetailViewController: UITableViewDataSource {
         default:
             break
         }
-        let cell = tableView.dequeueReusableCellWithIdentifier(resuseIdentifier, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: resuseIdentifier, for: indexPath)
         
         if let subheadlineTableViewCell = cell as? SubheadlineTableViewCell {
             subheadlineTableViewCell.updateFonts()
@@ -496,12 +496,12 @@ extension DetailViewController: UITableViewDataSource {
         
         if let subjectCell = cell as? SubjectTableViewCell {
             subjectCell.subjectTextView.text = voice.subject
-            subjectCell.subjectTextView.placeholder = dateFormatter.stringFromDate(voice.date)
-            subjectCell.subjectTextView.textContainerInset = UIEdgeInsetsZero
+            subjectCell.subjectTextView.placeholder = dateFormatter.string(from: voice.date)
+            subjectCell.subjectTextView.textContainerInset = UIEdgeInsets.zero
             subjectTextView = subjectCell.subjectTextView
             
         } else if let dateCell = cell as? DateTableViewCell {
-            dateCell.dateLabel.text = dateFormatter.stringFromDate(voice.date)
+            dateCell.dateLabel.text = dateFormatter.string(from: voice.date as Date)
             self.dateLabel = dateCell.dateLabel
             
         } else if let audioCell = cell as? AudioTableViewCell {
@@ -510,23 +510,23 @@ extension DetailViewController: UITableViewDataSource {
             recordButton = audioCell.recordButton
             
             if voice.filename != nil || recordingHasUpdates {
-                playback.playButton.hidden = false
-                playback.progressSlider.hidden = false
-                recordButton.setTitle("", forState: .Normal)
+                playback.playButton.isHidden = false
+                playback.progressSlider.isHidden = false
+                recordButton.setTitle("", for: UIControlState())
             } else {
-                playback.playButton.hidden = true
-                playback.progressSlider.hidden = true
-                recordButton.setTitle(" Tap to record", forState: .Normal)
+                playback.playButton.isHidden = true
+                playback.progressSlider.isHidden = true
+                recordButton.setTitle(" Tap to record", for: UIControlState())
             }
             
             if let audioPlayer = currentAudioPlayer {
                 playback.audioPlayer = audioPlayer
                 audioPlayer.delegate = self
                 playback.progressSlider.value = Float(audioPlayer.currentTime / audioPlayer.duration)
-                if audioPlayer.playing {
-                    playback.state = .Play
+                if audioPlayer.isPlaying {
+                    playback.state = .play
                 } else {
-                    playback.state = .Pause(deactive: true)
+                    playback.state = .pause(deactive: true)
                 }
                 currentAudioPlayer = nil
             }
@@ -540,17 +540,17 @@ extension DetailViewController: UITableViewDataSource {
 
 extension DetailViewController: UITextViewDelegate {
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // Call resignFirstResponder when the user presses the Return key
-        if text.rangeOfCharacterFromSet(NSCharacterSet.newlineCharacterSet()) != nil {
+        if text.rangeOfCharacter(from: CharacterSet.newlines) != nil {
             textView.resignFirstResponder()
             return false
         }
         return true
     }
     
-    func textViewDidChange(textView: UITextView) {
-        let newHeight = textView.sizeThatFits(CGSizeMake(textView.bounds.size.width, CGFloat.max)).height
+    func textViewDidChange(_ textView: UITextView) {
+        let newHeight = textView.sizeThatFits(CGSize(width: textView.bounds.size.width, height: CGFloat.greatestFiniteMagnitude)).height
         if newHeight != textView.bounds.height {
             tableView.beginUpdates()
             tableView.endUpdates()
@@ -580,11 +580,11 @@ class SubheadlineTableViewCell: UITableViewCell {
     {
         for view in contentView.subviews{
             if let label = view as? UILabel {
-                label.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+                label.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
             } else if let textField = view as? UITextField {
-                textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+                textField.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
             } else if let textView = view as? UITextView {
-                textView.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+                textView.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.subheadline)
             }
         }
     }

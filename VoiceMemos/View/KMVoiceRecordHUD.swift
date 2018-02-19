@@ -12,7 +12,7 @@ import UIKit
 class KMVoiceRecordHUD: UIView {
     @IBInspectable var rate: CGFloat = 0.0
     
-    @IBInspectable var fillColor: UIColor = UIColor.greenColor() {
+    @IBInspectable var fillColor: UIColor = UIColor.green {
         didSet {
             setNeedsDisplay()
         }
@@ -33,25 +33,25 @@ class KMVoiceRecordHUD: UIView {
         image = UIImage(named: "Mic")
     }
     
-    func update(rate: CGFloat) {
+    func update(_ rate: CGFloat) {
         self.rate = rate
         setNeedsDisplay()
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
-        CGContextTranslateCTM(context, 0, bounds.size.height)
-        CGContextScaleCTM(context, 1, -1)
+        context?.translateBy(x: 0, y: bounds.size.height)
+        context?.scaleBy(x: 1, y: -1)
         
-        CGContextDrawImage(context, bounds, image.CGImage)
-        CGContextClipToMask(context, bounds, image.CGImage)
+        context?.draw(image.cgImage!, in: bounds)
+        context?.clip(to: bounds, mask: image.cgImage!)
         
-        CGContextSetFillColor(context, CGColorGetComponents(fillColor.CGColor))
-        CGContextFillRect(context, CGRectMake(0, 0, bounds.width, bounds.height * rate))
+        context?.setFillColor(fillColor.cgColor.components!)
+        context?.fill(CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height * rate))
     }
     
     override func prepareForInterfaceBuilder() {
-        let bundle = NSBundle(forClass: self.dynamicType)
-        image = UIImage(named: "Mic", inBundle: bundle, compatibleWithTraitCollection: self.traitCollection)
+        let bundle = Bundle(for: type(of: self))
+        image = UIImage(named: "Mic", in: bundle, compatibleWith: self.traitCollection)
     }
 }

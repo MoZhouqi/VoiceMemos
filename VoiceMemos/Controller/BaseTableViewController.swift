@@ -30,7 +30,7 @@ class BaseTableViewController: UITableViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100.0
         let nib = UINib(nibName: Constants.Nib.name, bundle: nil)
-        tableView.registerNib(nib, forCellReuseIdentifier: Constants.TableViewCell.identifier)
+        tableView.register(nib, forCellReuseIdentifier: Constants.TableViewCell.identifier)
     }
     
 }

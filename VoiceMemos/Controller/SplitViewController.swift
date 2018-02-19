@@ -14,7 +14,7 @@ class SplitViewController: UISplitViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        preferredDisplayMode = .AllVisible
+        preferredDisplayMode = .allVisible
         preferredPrimaryColumnWidthFraction = 0.5
         maximumPrimaryColumnWidth = 450
         delegate = self
@@ -26,7 +26,7 @@ class SplitViewController: UISplitViewController {
 
 extension SplitViewController: UISplitViewControllerDelegate {
     
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
         let recordViewController = (secondaryViewController as? UINavigationController)?.visibleViewController as? DetailViewController
         if recordViewController != nil {
             return false
@@ -34,9 +34,9 @@ extension SplitViewController: UISplitViewControllerDelegate {
         return true
     }
     
-    func splitViewController(splitViewController: UISplitViewController, separateSecondaryViewControllerFromPrimaryViewController primaryViewController: UIViewController) -> UIViewController? {
+    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
         if (primaryViewController as? UINavigationController)?.visibleViewController as? VoicesTableViewController != nil {
-            let viewController = storyboard?.instantiateViewControllerWithIdentifier("NoVoiceSelected")
+            let viewController = storyboard?.instantiateViewController(withIdentifier: "NoVoiceSelected")
             return viewController
         } else {
             return nil
