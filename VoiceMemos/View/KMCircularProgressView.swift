@@ -9,45 +9,45 @@
 import UIKit
 
 @IBDesignable
-public class KMCircularProgressView: UIView {
+open class KMCircularProgressView: UIView {
     
-    @IBInspectable public var progress: CGFloat = 0.0 {
+    @IBInspectable open var progress: CGFloat = 0.0 {
         didSet {
             progressLayer.strokeEnd = progress
         }
     }
     
-    public var iconStyle: KMIconStyle = .Empty {
+    open var iconStyle: KMIconStyle = .empty {
         didSet {
             iconLayer.path = iconStyle.path(iconLayerBounds)
         }
     }
     
-    @IBInspectable public var lineWidth: CGFloat = 3.0 {
+    @IBInspectable open var lineWidth: CGFloat = 3.0 {
         didSet {
             backgroundLayer.lineWidth = lineWidth
             progressLayer.lineWidth = lineWidth
         }
     }
     
-    @IBInspectable public var backgroundLayerStrokeColor: UIColor = UIColor(white: 0.90, alpha: 1.0) {
+    @IBInspectable open var backgroundLayerStrokeColor: UIColor = UIColor(white: 0.90, alpha: 1.0) {
         didSet {
-            backgroundLayer.strokeColor = backgroundLayerStrokeColor.CGColor
+            backgroundLayer.strokeColor = backgroundLayerStrokeColor.cgColor
         }
     }
     
-    @IBInspectable public var iconLayerFrameRatio: CGFloat = 0.4 {
+    @IBInspectable open var iconLayerFrameRatio: CGFloat = 0.4 {
         didSet {
             iconLayer.frame = iconLayerFrame(iconLayerBounds, ratio: iconLayerFrameRatio)
             iconLayer.path = iconStyle.path(iconLayerBounds)
         }
     }
     
-    public var iconLayerBounds: CGRect {
+    open var iconLayerBounds: CGRect {
         return iconLayer.bounds
     }
     
-    public func setProgress(progress: CGFloat, animated: Bool = true) {
+    open func setProgress(_ progress: CGFloat, animated: Bool = true) {
         if animated {
             self.progress = progress
         } else {
@@ -55,40 +55,41 @@ public class KMCircularProgressView: UIView {
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.fromValue = progress
             animation.duration = 0.0
-            progressLayer.addAnimation(animation, forKey: nil)
+            progressLayer.add(animation, forKey: nil)
         }
     }
     
     public enum KMIconStyle {
-        case Play
-        case Pause
-        case Stop
-        case Empty
-        case Custom(UIBezierPath)
+        case play
+        case pause
+        case stop
+        case empty
+        case custom(UIBezierPath)
         
-        func path(layerBounds: CGRect) -> CGPath {
+        func path(_ layerBounds: CGRect) -> CGPath {
             switch self {
-            case .Play:
+            case .play:
                 let path = UIBezierPath()
-                path.moveToPoint(CGPoint(x: layerBounds.width / 5, y: 0))
-                path.addLineToPoint(CGPoint(x: layerBounds.width, y: layerBounds.height / 2))
-                path.addLineToPoint(CGPoint(x: layerBounds.width / 5, y: layerBounds.height))
-                path.closePath()
-                return path.CGPath
-            case .Pause:
-                var rect = CGRect(origin: CGPoint(x: layerBounds.width * 0.1, y: 0), size: CGSize(width: layerBounds.width * 0.2, height: layerBounds.height))
+                path.move(to: CGPoint(x: layerBounds.width / 5, y: 0))
+                path.addLine(to: CGPoint(x: layerBounds.width, y: layerBounds.height / 2))
+                path.addLine(to: CGPoint(x: layerBounds.width / 5, y: layerBounds.height))
+                path.close()
+                return path.cgPath
+            case .pause:
+                let rect = CGRect(origin: CGPoint(x: layerBounds.width * 0.1, y: 0), size: CGSize(width: layerBounds.width * 0.2, height: layerBounds.height))
                 let path = UIBezierPath(rect: rect)
-                rect.offsetInPlace(dx: layerBounds.width * 0.6, dy: 0)
-                path.appendPath(UIBezierPath(rect: rect))
-                return path.CGPath
-            case .Stop:
-                let insetBounds = CGRectInset(layerBounds, layerBounds.width / 6, layerBounds.width / 6)
+                rect.offsetBy(dx: layerBounds.width * 0.6, dy: 0)
+                
+                path.append(UIBezierPath(rect: rect))
+                return path.cgPath
+            case .stop:
+                let insetBounds = layerBounds.insetBy(dx: layerBounds.width / 6, dy: layerBounds.width / 6)
                 let path = UIBezierPath(rect: insetBounds)
-                return path.CGPath
-            case .Empty:
-                return UIBezierPath().CGPath
-            case .Custom(let path):
-                return path.CGPath
+                return path.cgPath
+            case .empty:
+                return UIBezierPath().cgPath
+            case .custom(let path):
+                return path.cgPath
             }
         }
     }
@@ -97,7 +98,7 @@ public class KMCircularProgressView: UIView {
         let backgroundLayer = CAShapeLayer()
         backgroundLayer.fillColor = nil
         backgroundLayer.lineWidth = self.lineWidth
-        backgroundLayer.strokeColor = self.backgroundLayerStrokeColor.CGColor
+        backgroundLayer.strokeColor = self.backgroundLayerStrokeColor.cgColor
         self.layer.addSublayer(backgroundLayer)
         
         return backgroundLayer
@@ -107,7 +108,7 @@ public class KMCircularProgressView: UIView {
         let progressLayer = CAShapeLayer()
         progressLayer.fillColor = nil
         progressLayer.lineWidth = self.lineWidth
-        progressLayer.strokeColor = self.tintColor.CGColor
+        progressLayer.strokeColor = self.tintColor.cgColor
         self.layer.insertSublayer(progressLayer, above: self.backgroundLayer)
         
         return progressLayer
@@ -115,48 +116,48 @@ public class KMCircularProgressView: UIView {
     
     lazy var iconLayer: CAShapeLayer = {
         let iconLayer = CAShapeLayer()
-        iconLayer.fillColor = self.tintColor.CGColor
+        iconLayer.fillColor = self.tintColor.cgColor
         self.layer.addSublayer(iconLayer)
         
         return iconLayer
         }()
     
-    func iconLayerFrame(rect: CGRect, ratio: CGFloat) -> CGRect {
+    func iconLayerFrame(_ rect: CGRect, ratio: CGFloat) -> CGRect {
         let insetRatio = (1 - ratio) / 2.0
-        return CGRectInset(rect, CGRectGetWidth(rect) * insetRatio, CGRectGetHeight (rect) * insetRatio)
+        return rect.insetBy(dx: rect.width * insetRatio, dy: rect.height * insetRatio)
     }
     
-    func getSquareLayerFrame(rect: CGRect) -> CGRect {
+    func getSquareLayerFrame(_ rect: CGRect) -> CGRect {
         if rect.width != rect.height {
             let width = min(rect.width, rect.height)
             
             let originX = (rect.width - width) / 2
             let originY = (rect.height - width) / 2
             
-            return CGRectMake(originX, originY, width, width)
+            return CGRect(x: originX, y: originY, width: width, height: width)
         }
         return rect
     }
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         let squareRect = getSquareLayerFrame(layer.bounds)
         backgroundLayer.frame = squareRect
         progressLayer.frame = squareRect
         
-        let innerRect = CGRectInset(squareRect, lineWidth / 2.0, lineWidth / 2.0)
+        let innerRect = squareRect.insetBy(dx: lineWidth / 2.0, dy: lineWidth / 2.0)
         iconLayer.frame = iconLayerFrame(innerRect, ratio: iconLayerFrameRatio)
         
-        let center = CGPointMake(squareRect.width / 2.0, squareRect.height / 2.0)
+        let center = CGPoint(x: squareRect.width / 2.0, y: squareRect.height / 2.0)
         let path = UIBezierPath(arcCenter: center, radius: innerRect.width / 2.0, startAngle: CGFloat(-M_PI_2), endAngle: CGFloat(-M_PI_2 + 2.0 * M_PI), clockwise: true)
-        backgroundLayer.path = path.CGPath
-        progressLayer.path = path.CGPath
+        backgroundLayer.path = path.cgPath
+        progressLayer.path = path.cgPath
         iconLayer.path = iconStyle.path(iconLayerBounds)
     }
     
-    override public func prepareForInterfaceBuilder() {
+    override open func prepareForInterfaceBuilder() {
         super.prepareForInterfaceBuilder()
-        iconStyle = .Play
+        iconStyle = .play
     }
     
 }

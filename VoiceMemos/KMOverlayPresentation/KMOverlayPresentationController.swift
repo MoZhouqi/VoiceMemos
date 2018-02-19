@@ -13,8 +13,8 @@ UIViewControllerTransitioningDelegate {
     
     let dimmingView: UIView = UIView()
     
-    override init(presentedViewController: UIViewController, presentingViewController: UIViewController) {
-        super.init(presentedViewController: presentedViewController, presentingViewController: presentingViewController)
+    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
         dimmingView.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
         dimmingView.alpha = 0.0
     }
@@ -25,12 +25,12 @@ UIViewControllerTransitioningDelegate {
         dimmingView.frame = containerView!.bounds
         dimmingView.alpha = 0.0
         
-        containerView!.insertSubview(dimmingView, atIndex: 0)
+        containerView!.insertSubview(dimmingView, at: 0)
         
-        presentingViewController.view.tintAdjustmentMode = .Dimmed
+        presentingViewController.view.tintAdjustmentMode = .dimmed
         
-        if let transitionCoordinator = presentedViewController.transitionCoordinator() {
-            transitionCoordinator.animateAlongsideTransition({ _ in
+        if let transitionCoordinator = presentedViewController.transitionCoordinator {
+            transitionCoordinator.animate(alongsideTransition: { _ in
                 self.dimmingView.alpha = 1.0
                 }, completion: nil)
         } else {
@@ -41,36 +41,36 @@ UIViewControllerTransitioningDelegate {
     override func dismissalTransitionWillBegin() {
         super.dismissalTransitionWillBegin()
         
-        if let transitionCoordinator = presentedViewController.transitionCoordinator() {
-            transitionCoordinator.animateAlongsideTransition({ _ in
+        if let transitionCoordinator = presentedViewController.transitionCoordinator {
+            transitionCoordinator.animate(alongsideTransition: { _ in
                 self.dimmingView.alpha = 0.0
                 }, completion: { _ in
-                    self.presentingViewController.view.tintAdjustmentMode = .Automatic
+                    self.presentingViewController.view.tintAdjustmentMode = .automatic
             })
         } else {
             self.dimmingView.alpha = 0.0
-            self.presentingViewController.view.tintAdjustmentMode = .Automatic
+            self.presentingViewController.view.tintAdjustmentMode = .automatic
         }
     }
     
-    override func adaptivePresentationStyle() -> UIModalPresentationStyle {
-        return .OverFullScreen
+    override var adaptivePresentationStyle : UIModalPresentationStyle {
+        return .overFullScreen
     }
     
     override func containerViewWillLayoutSubviews() {
         dimmingView.frame = containerView!.bounds
-        presentedView()!.frame = frameOfPresentedViewInContainerView()
+        presentedView!.frame = frameOfPresentedViewInContainerView
     }
     
-    override func shouldPresentInFullscreen() -> Bool {
+    override var shouldPresentInFullscreen : Bool {
         return false
     }
     
-    override func frameOfPresentedViewInContainerView() -> CGRect {
+    override var frameOfPresentedViewInContainerView : CGRect {
         let containerBounds = containerView!.bounds
-        var presentedViewFrame = CGRectZero
-        presentedViewFrame.size = CGSizeMake(200, 250)
-        presentedViewFrame.origin = CGPointMake(containerBounds.size.width / 2.0, containerBounds.size.height / 2.0)
+        var presentedViewFrame = CGRect.zero
+        presentedViewFrame.size = CGSize(width: 200, height: 250)
+        presentedViewFrame.origin = CGPoint(x: containerBounds.size.width / 2.0, y: containerBounds.size.height / 2.0)
         presentedViewFrame.origin.x -= presentedViewFrame.size.width / 2.0
         presentedViewFrame.origin.y -= presentedViewFrame.size.height / 2.0
         

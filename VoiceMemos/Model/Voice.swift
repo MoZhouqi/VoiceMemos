@@ -11,7 +11,7 @@ import CoreData
 
 class Voice: NSManagedObject {
 
-    @NSManaged var date: NSDate
+    @NSManaged var date: Date
     @NSManaged var filename: String?
     @NSManaged var subject: String
     @NSManaged var duration: NSNumber

@@ -21,14 +21,14 @@ class AudioSessionHelper {
         }
     }
     
-    class func postStartAudioNotificaion(AudioObject: NSObject) {
+    class func postStartAudioNotificaion(_ AudioObject: NSObject) {
         let userInfo = [Constants.Notification.AudioObjectWillStart.UserInfo.AudioObjectKey: AudioObject]
-        NSNotificationCenter.defaultCenter().postNotificationName(Constants.Notification.AudioObjectWillStart.Name,
+        NotificationCenter.default.post(name: Notification.Name(rawValue: Constants.Notification.AudioObjectWillStart.Name),
             object: nil,
             userInfo: userInfo)
     }
     
-    class func setupSessionActive(active: Bool, catagory: String = AVAudioSessionCategoryPlayback) {
+    class func setupSessionActive(_ active: Bool, catagory: String = AVAudioSessionCategoryPlayback) {
         let session = AVAudioSession.sharedInstance()
         if active {
             do {
@@ -44,9 +44,9 @@ class AudioSessionHelper {
             }
         } else {
             do {
-                try session.setActive(false, withOptions: .NotifyOthersOnDeactivation)
+                try session.setActive(false, with: .notifyOthersOnDeactivation)
             } catch {
-                ("Could not deactivate session: \(error)")
+                debugPrint("Could not deactivate session: \(error)")
             }
         }
     }

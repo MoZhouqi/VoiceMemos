@@ -10,30 +10,54 @@ import UIKit
 import AVFoundation
 import Foundation
 import CoreData
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
 
 class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     
     // MARK: Property
     
-    var fetchedResultsController : NSFetchedResultsController!
+    var fetchedResultsController : NSFetchedResultsController<NSFetchRequestResult>!
     var searchController: UISearchController!
     var resultsTableController: VoiceSearchResultsController!
     var coreDataStack: CoreDataStack!
     weak var selectedVoice: DetailViewController?
     
-    lazy var dateFormatter: NSDateFormatter = {
-        var formatter = NSDateFormatter()
-        formatter.dateStyle = .MediumStyle
-        formatter.timeStyle = .ShortStyle
+    lazy var dateFormatter: DateFormatter = {
+        var formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
         return formatter
         }()
     
-    lazy var directoryURL: NSURL = {
-        let doucumentURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+    lazy var directoryURL: URL = {
+        let doucumentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         
-        let _directoryURL = doucumentURL.URLByAppendingPathComponent("Voice")
+        let _directoryURL = doucumentURL.appendingPathComponent("Voice")
         do {
-            try NSFileManager.defaultManager().createDirectoryAtURL(_directoryURL, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(at: _directoryURL, withIntermediateDirectories: true, attributes: nil)
         } catch {
             assertionFailure("Error creating directory: \(error)")
         }
@@ -44,7 +68,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let fetchRequest = NSFetchRequest(entityName: "Voice")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Voice")
         fetchRequest.fetchBatchSize = 20
         let keySort = NSSortDescriptor(key: "date", ascending: false)
         
@@ -66,46 +90,46 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleInterruption:", name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "audioObjectWillStart:", name: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "proximityStateDidChange:", name: UIDeviceProximityStateDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(VoicesTableViewController.handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+        NotificationCenter.default.addObserver(self, selector: #selector(VoicesTableViewController.audioObjectWillStart(_:)), name: NSNotification.Name(rawValue: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(VoicesTableViewController.proximityStateDidChange(_:)), name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIDeviceProximityStateDidChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: AudioSessionHelper.Constants.Notification.AudioObjectWillStart.Name), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceProximityStateDidChange, object: nil)
     }
     
     // MARK: Notification
     
-    func handleInterruption(notification: NSNotification) {
+    func handleInterruption(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as! UInt
-            if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
-                if playback.audioPlayer?.playing == true {
-                    playback.state = .Pause(deactive: true)
+            if interruptionType == AVAudioSessionInterruptionType.began.rawValue {
+                if playback.audioPlayer?.isPlaying == true {
+                    playback.state = .pause(deactive: true)
                 }
             }
         }
     }
     
-    func audioObjectWillStart(notification: NSNotification) {
+    func audioObjectWillStart(_ notification: Notification) {
         if let userInfo = notification.userInfo {
-            if let audioObject: AnyObject = userInfo[AudioSessionHelper.Constants.Notification.AudioObjectWillStart.UserInfo.AudioObjectKey] {
-                if playback.audioPlayer != audioObject as? AVAudioPlayer && playback.audioPlayer?.playing == true {
-                    playback.state = .Pause(deactive: false)
+            if let audioObject: AnyObject = userInfo[AudioSessionHelper.Constants.Notification.AudioObjectWillStart.UserInfo.AudioObjectKey] as AnyObject? {
+                if playback.audioPlayer != audioObject as? AVAudioPlayer && playback.audioPlayer?.isPlaying == true {
+                    playback.state = .pause(deactive: false)
                 }
             }
         }
     }
     
-    func proximityStateDidChange(notification: NSNotification) {
-        if playback.audioPlayer?.playing == true {
-            if UIDevice.currentDevice().proximityState {
+    func proximityStateDidChange(_ notification: Notification) {
+        if playback.audioPlayer?.isPlaying == true {
+            if UIDevice.current.proximityState {
                 AudioSessionHelper.setupSessionActive(true, catagory: AVAudioSessionCategoryPlayAndRecord)
             } else {
                 AudioSessionHelper.setupSessionActive(true)
@@ -115,9 +139,9 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     
     // MARK: Target Action
     
-    @IBAction func addVoiceButtonTapped(sender: AnyObject) {
+    @IBAction func addVoiceButtonTapped(_ sender: AnyObject) {
         checkVocieHasChangesWithContinuationAction { [unowned self] in
-            self.performSegueWithIdentifier("Add Voice", sender: self)
+            self.performSegue(withIdentifier: "Add Voice", sender: self)
         }
         
     }
@@ -144,76 +168,76 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         
     }
     
-    func checkVocieHasChangesWithContinuationAction(action: () -> Void) {
+    func checkVocieHasChangesWithContinuationAction(_ action: @escaping () -> Void) {
         if selectedVoice != nil && selectedVoice!.voiceHasChanges {
-            let alertController = UIAlertController(title: nil, message: "The voice has not been saved, are you sure to continue?", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: nil, message: "The voice has not been saved, are you sure to continue?", preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
                 
             }
             alertController.addAction(cancelAction)
             
-            let OKAction = UIAlertAction(title: "Continue", style: .Default) { _ in
+            let OKAction = UIAlertAction(title: "Continue", style: .default) { _ in
                 action()
             }
             alertController.addAction(OKAction)
             
-            presentViewController(alertController, animated: true, completion: nil)
+            present(alertController, animated: true, completion: nil)
         } else {
             action()
         }
     }
     
-    func  voiceForRowAtIndexPath(indexPath: NSIndexPath, WithTableView tableView: UITableView) -> Voice {
+    func  voiceForRowAtIndexPath(_ indexPath: IndexPath, WithTableView tableView: UITableView) -> Voice {
         if tableView == self.tableView {
-            return self.fetchedResultsController.objectAtIndexPath(indexPath) as! Voice
+            return self.fetchedResultsController.object(at: indexPath) as! Voice
         } else {
             return self.resultsTableController.filteredVoices[indexPath.row]
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         setEditing(false, animated: true)
         
         if segue.identifier == "Add Voice" || segue.identifier == "Change Voice" {
             
-            let detailViewController = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+            let detailViewController = (segue.destination as! UINavigationController).topViewController as! DetailViewController
             selectedVoice = detailViewController
             
             detailViewController.delegate = self
             detailViewController.directoryURL = directoryURL
             
             if let svc = splitViewController {
-                detailViewController.navigationItem.leftBarButtonItem = svc.displayModeButtonItem()
+                detailViewController.navigationItem.leftBarButtonItem = svc.displayModeButtonItem
                 detailViewController.navigationItem.leftItemsSupplementBackButton = true
             }
             
-            let childContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
-            childContext.parentContext = coreDataStack.context
+            let childContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            childContext.parent = coreDataStack.context
             detailViewController.context = childContext
             
             if segue.identifier == "Add Voice" {
                 
-                let voiceEntity = NSEntityDescription.entityForName("Voice", inManagedObjectContext: childContext)
-                let voice = Voice(entity: voiceEntity!, insertIntoManagedObjectContext: childContext)
-                voice.date = NSDate()
+                let voiceEntity = NSEntityDescription.entity(forEntityName: "Voice", in: childContext)
+                let voice = Voice(entity: voiceEntity!, insertInto: childContext)
+                voice.date = Date()
                 voice.subject = ""
                 detailViewController.voice = voice
                 
-                playback.state = .Pause(deactive: true)
+                playback.state = .pause(deactive: true)
                 
             } else if segue.identifier == "Change Voice" {
                 
                 let voice = sender as! Voice
-                let childVoice = childContext.objectWithID(voice.objectID) as! Voice
+                let childVoice = childContext.object(with: voice.objectID) as! Voice
                 detailViewController.voice = childVoice
                 
                 if voice == playback.voice {
                     playback.audioPlayer?.delegate = nil
                     detailViewController.currentAudioPlayer = playback.audioPlayer
-                    playback.state = .Default(deactive: false)
+                    playback.state = .default(deactive: false)
                 } else {
-                    playback.state = .Pause(deactive: true)
+                    playback.state = .pause(deactive: true)
                 }
             }
         }
@@ -221,7 +245,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     
     // MARK: - UITableViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         
         if tableView == self.tableView {
             return fetchedResultsController.sections!.count
@@ -230,7 +254,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         }
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
             let sectionInfo = fetchedResultsController.sections![section]
             return sectionInfo.numberOfObjects
@@ -239,8 +263,8 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(Constants.TableViewCell.identifier) as! VoiceTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCell.identifier) as! VoiceTableViewCell
         
         let voice = voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
         
@@ -248,16 +272,16 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         return cell
     }
     
-    func configureCell(cell: VoiceTableViewCell, forVoice voice: Voice) {
+    func configureCell(_ cell: VoiceTableViewCell, forVoice voice: Voice) {
         cell.updateFonts()
         
         cell.tableView = tableView
         cell.titleLabel.preferredMaxLayoutWidth = cell.maxLayoutWidth
         
         cell.titleLabel.text = voice.subject
-        cell.dateLabel.text = dateFormatter.stringFromDate(voice.date)
+        cell.dateLabel.text = dateFormatter.string(from: voice.date as Date)
         
-        let duration = voice.duration.integerValue
+        let duration = voice.duration.intValue
         let minutes = duration / 60
         let seconds = duration % 60
         cell.durationLabel.text = "\(minutes):" + String(format: "%02d", seconds)
@@ -274,48 +298,48 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
         }
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     // MARK: - Table view delegate
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! VoiceTableViewCell
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! VoiceTableViewCell
         let voice = voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
         
         changePlaybackStateForVoice(voice, cell: cell)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         checkVocieHasChangesWithContinuationAction { [unowned self] in
             let voice = self.voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
-            self.performSegueWithIdentifier("Change Voice", sender: voice)
+            self.performSegue(withIdentifier: "Change Voice", sender: voice)
         }
     }
     
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let voice = self.voiceForRowAtIndexPath(indexPath, WithTableView: tableView)
         
-        let deleteAction = UITableViewRowAction(style: .Normal, title: "Delete") { action, index in
+        let deleteAction = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
             if tableView == self.resultsTableController.tableView {
-                self.resultsTableController.filteredVoices.removeAtIndex(indexPath.row)
-                self.resultsTableController.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                self.resultsTableController.filteredVoices.remove(at: indexPath.row)
+                self.resultsTableController.tableView.deleteRows(at: [indexPath], with: .automatic)
             }
             self.deleteVoiceInPersistentStore(voice)
         }
         
-        let shareAction = UITableViewRowAction(style: .Normal, title: "Share") { action, index in
-            let audioPath = self.directoryURL.URLByAppendingPathComponent(voice.filename!)
+        let shareAction = UITableViewRowAction(style: .normal, title: "Share") { action, index in
+            let audioPath = self.directoryURL.appendingPathComponent(voice.filename!)
             let activityViewController = UIActivityViewController(activityItems: [audioPath], applicationActivities: nil)
             activityViewController.popoverPresentationController?.sourceView = tableView
-            activityViewController.popoverPresentationController?.sourceRect = tableView.rectForRowAtIndexPath(indexPath)
-            self.presentViewController(activityViewController, animated: true, completion: nil)
+            activityViewController.popoverPresentationController?.sourceRect = tableView.rectForRow(at: indexPath)
+            self.present(activityViewController, animated: true, completion: nil)
         }
         
-        deleteAction.backgroundColor = UIColor.redColor()
-        shareAction.backgroundColor = UIColor.blueColor()
+        deleteAction.backgroundColor = UIColor.red
+        shareAction.backgroundColor = UIColor.blue
         
         return [deleteAction, shareAction]
     }
@@ -325,9 +349,9 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     class KMPlayback {
         let progressView: KMCircularProgressView = KMCircularProgressView()
         var voice: Voice?
-        var timer: NSTimer?
+        var timer: Timer?
         var audioPlayer: AVAudioPlayer?
-        var state: KMPlaybackState = .Default(deactive: false) {
+        var state: KMPlaybackState = .default(deactive: false) {
             didSet {
                 state.changePlaybackState(self)
             }
@@ -346,53 +370,53 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     }
     
     enum KMPlaybackState {
-        case Play
-        case Pause(deactive: Bool)
-        case Finish
-        case Default(deactive: Bool)
+        case play
+        case pause(deactive: Bool)
+        case finish
+        case `default`(deactive: Bool)
         
-        func changePlaybackState(playback: KMPlayback) {
+        func changePlaybackState(_ playback: KMPlayback) {
             switch self {
-            case .Play:
+            case .play:
                 if let player = playback.audioPlayer {
                     AudioSessionHelper.postStartAudioNotificaion(player)
                     playback.timer?.invalidate()
-                    playback.timer = NSTimer(
+                    playback.timer = Timer(
                         timeInterval: 0.1,
                         target: playback,
-                        selector: "updateProgress",
+                        selector: #selector(KMPlayback.updateProgress),
                         userInfo: nil,
                         repeats: true)
-                    NSRunLoop.currentRunLoop().addTimer(playback.timer!, forMode: NSRunLoopCommonModes)
+                    RunLoop.current.add(playback.timer!, forMode: RunLoopMode.commonModes)
                     let currentTime = player.currentTime
                     player.currentTime = currentTime
                     AudioSessionHelper.setupSessionActive(true)
                     player.play()
-                    UIDevice.currentDevice().proximityMonitoringEnabled = true
+                    UIDevice.current.isProximityMonitoringEnabled = true
                 }
-                playback.progressView.iconStyle = .Pause
-            case .Pause(let deactive):
+                playback.progressView.iconStyle = .pause
+            case .pause(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer?.pause()
-                UIDevice.currentDevice().proximityMonitoringEnabled = false
+                UIDevice.current.isProximityMonitoringEnabled = false
                 if deactive {
                     AudioSessionHelper.setupSessionActive(false)
                 }
-                playback.progressView.iconStyle = .Play
-            case .Finish:
+                playback.progressView.iconStyle = .play
+            case .finish:
                 playback.timer?.invalidate()
                 playback.timer = nil
-                UIDevice.currentDevice().proximityMonitoringEnabled = false
+                UIDevice.current.isProximityMonitoringEnabled = false
                 AudioSessionHelper.setupSessionActive(false)
                 playback.progressView.progress = 1.0
-                playback.progressView.iconStyle = .Play
-            case .Default(let deactive):
+                playback.progressView.iconStyle = .play
+            case .default(let deactive):
                 playback.timer?.invalidate()
                 playback.timer = nil
                 playback.audioPlayer = nil
                 playback.voice = nil
-                UIDevice.currentDevice().proximityMonitoringEnabled = false
+                UIDevice.current.isProximityMonitoringEnabled = false
                 if deactive {
                     AudioSessionHelper.setupSessionActive(false)
                 }
@@ -404,57 +428,57 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
     
     lazy var playback = KMPlayback()
     
-    func changePlaybackStateForVoice(voice: Voice, cell: VoiceTableViewCell) {
+    func changePlaybackStateForVoice(_ voice: Voice, cell: VoiceTableViewCell) {
         if voice == playback.voice {
             switch playback.state {
-            case .Play:
-                playback.state = .Pause(deactive: true)
+            case .play:
+                playback.state = .pause(deactive: true)
             default:
-                playback.state = .Play
+                playback.state = .play
             }
         } else {
-            let url = directoryURL.URLByAppendingPathComponent(voice.filename!)
+            let url = directoryURL.appendingPathComponent(voice.filename!)
             
             do {
-                try playback.audioPlayer = AVAudioPlayer(contentsOfURL: url)
+                try playback.audioPlayer = AVAudioPlayer(contentsOf: url)
                 playback.audioPlayer?.delegate = self
                 let progressView = playback.progressView
                 progressView.frame = cell.playbackProgressPlaceholderView.bounds
                 progressView.setProgress(0.0, animated: false)
                 cell.playbackProgressPlaceholderView.addSubview(progressView)
                 playback.voice = voice
-                playback.state = .Play
+                playback.state = .play
             }
             catch let error as NSError {
-                playback.state = .Default(deactive: true)
+                playback.state = .default(deactive: true)
                 if error.code == 2003334207 {
-                    let alertController = UIAlertController(title: nil, message: "The audio file seems to be corrupted. Do you want to delete this record?", preferredStyle: .Alert)
+                    let alertController = UIAlertController(title: nil, message: "The audio file seems to be corrupted. Do you want to delete this record?", preferredStyle: .alert)
                     
-                    let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
                         
                     }
                     alertController.addAction(cancelAction)
                     
-                    let OKAction = UIAlertAction(title: "Delete", style: .Destructive) { _ in
+                    let OKAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                         self.deleteVoiceInPersistentStore(voice)
                     }
                     alertController.addAction(OKAction)
                     
-                    presentViewController(alertController, animated: true, completion: nil)
+                    present(alertController, animated: true, completion: nil)
                 }
                 
             }
         }
     }
     
-    func deleteVoiceInPersistentStore(voice: Voice) {
+    func deleteVoiceInPersistentStore(_ voice: Voice) {
         if voice == playback.voice {
-            playback.state = .Default(deactive: true)
+            playback.state = .default(deactive: true)
         }
         
-        let removeFileURL = directoryURL.URLByAppendingPathComponent(voice.filename!)
-        _ = try? NSFileManager.defaultManager().removeItemAtURL(removeFileURL)
-        coreDataStack.context.deleteObject(voice)
+        let removeFileURL = directoryURL.appendingPathComponent(voice.filename!)
+        _ = try? FileManager.default.removeItem(at: removeFileURL)
+        coreDataStack.context.delete(voice)
         coreDataStack.saveContext()
     }
     
@@ -464,7 +488,7 @@ class VoicesTableViewController: BaseTableViewController, UISearchBarDelegate {
 
 extension VoicesTableViewController: UIGestureRecognizerDelegate {
     
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         
         // Ignore interactive pop gesture when there is only one view controller on the navigation stack
         if navigationController?.viewControllers.count <= 1 {
@@ -479,13 +503,13 @@ extension VoicesTableViewController: UIGestureRecognizerDelegate {
 
 extension VoicesTableViewController: DetailViewControllerDelegate {
     
-    func didFinishViewController(detailViewController: DetailViewController, didSave: Bool) {
+    func didFinishViewController(_ detailViewController: DetailViewController, didSave: Bool) {
         if didSave {
             let context = detailViewController.context
-            context.performBlock {
-                if context.hasChanges {
+            context?.perform {
+                if (context?.hasChanges)! {
                     do {
-                        try context.save()
+                        try context?.save()
                     }
                     catch {
                         debugPrint("Error saving: \(error)")
@@ -497,10 +521,10 @@ extension VoicesTableViewController: DetailViewControllerDelegate {
         }
         
         if let svc = splitViewController {
-            if svc.collapsed {
-                navigationController?.popToViewController(self, animated: true)
+            if svc.isCollapsed {
+                _ = navigationController?.popToViewController(self, animated: true)
             } else {
-                performSegueWithIdentifier("Show Detail NoViewSelected", sender: self)
+                performSegue(withIdentifier: "Show Detail NoViewSelected", sender: self)
             }
         }
     }
@@ -511,34 +535,34 @@ extension VoicesTableViewController: DetailViewControllerDelegate {
 
 extension VoicesTableViewController: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController,
-        didChangeObject anObject: AnyObject,
-        atIndexPath indexPath: NSIndexPath?,
-        forChangeType type: NSFetchedResultsChangeType,
-        newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+        didChange anObject: Any,
+        at indexPath: IndexPath?,
+        for type: NSFetchedResultsChangeType,
+        newIndexPath: IndexPath?) {
             switch type {
-            case .Insert:
-                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
-            case .Delete:
-                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-            case .Update:
-                let cell = tableView.cellForRowAtIndexPath(indexPath!) as! VoiceTableViewCell
-                let voice = fetchedResultsController.objectAtIndexPath(indexPath!) as! Voice
+            case .insert:
+                tableView.insertRows(at: [newIndexPath!], with: .automatic)
+            case .delete:
+                tableView.deleteRows(at: [indexPath!], with: .automatic)
+            case .update:
+                let cell = tableView.cellForRow(at: indexPath!) as! VoiceTableViewCell
+                let voice = fetchedResultsController.object(at: indexPath!) as! Voice
                 configureCell(cell, forVoice: voice)
-            case .Move:
-                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            case .move:
+                tableView.deleteRows(at: [indexPath!], with: .automatic)
+                tableView.insertRows(at: [newIndexPath!], with: .automatic)
             }
             
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
-        updateSearchResultsForSearchController(searchController)
+        updateSearchResults(for: searchController)
     }
     
 }
@@ -547,13 +571,13 @@ extension VoicesTableViewController: NSFetchedResultsControllerDelegate {
 
 extension VoicesTableViewController: AVAudioPlayerDelegate {
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if flag {
-            playback.state = .Finish
+            playback.state = .finish
         }
     }
     
-    func audioPlayerDecodeErrorDidOccur(player: AVAudioPlayer, error: NSError?) {
+    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
         assertionFailure("Decode Error occurred! Error: \(error)")
     }
     
@@ -563,7 +587,7 @@ extension VoicesTableViewController: AVAudioPlayerDelegate {
 
 extension VoicesTableViewController: UISearchControllerDelegate {
     
-    func willDismissSearchController(searchController: UISearchController) {
+    func willDismissSearchController(_ searchController: UISearchController) {
         tableView.reloadData()
     }
     
@@ -573,15 +597,15 @@ extension VoicesTableViewController: UISearchControllerDelegate {
 
 extension VoicesTableViewController: UISearchResultsUpdating {
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         let searchResults = self.fetchedResultsController.fetchedObjects as! [Voice]
         
-        let whitespaceCharacterSet = NSCharacterSet.whitespaceCharacterSet()
-        let strippedString = searchController.searchBar.text?.stringByTrimmingCharactersInSet(whitespaceCharacterSet) ?? ""
+        let whitespaceCharacterSet = CharacterSet.whitespaces
+        let strippedString = searchController.searchBar.text?.trimmingCharacters(in: whitespaceCharacterSet) ?? ""
         let predicate = NSPredicate(format:
             "SELF.subject contains[c] %@", strippedString)
         
-        let filteredResults = searchResults.filter { predicate.evaluateWithObject($0) }
+        let filteredResults = searchResults.filter { predicate.evaluate(with: $0) }
         
         let searchResultsController = searchController.searchResultsController as! VoiceSearchResultsController
         searchResultsController.filteredVoices = filteredResults

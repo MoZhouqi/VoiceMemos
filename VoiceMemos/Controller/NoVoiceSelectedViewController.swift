@@ -15,7 +15,7 @@ class NoVoiceSelectedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let svc = splitViewController {
-            navigationItem.leftBarButtonItem = svc.displayModeButtonItem()
+            navigationItem.leftBarButtonItem = svc.displayModeButtonItem
             navigationItem.leftItemsSupplementBackButton = true
         }
     }

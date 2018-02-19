@@ -8,13 +8,37 @@
 
 import UIKit
 import AVFoundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class RecordViewController: UIViewController {
     
     // MARK: Property
     
     var audioRecorder: AVAudioRecorder?
-    var meterTimer: NSTimer?
+    var meterTimer: Timer?
     let recordDuration = 120.0
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var voiceRecordHUD: KMVoiceRecordHUD!
@@ -24,59 +48,59 @@ class RecordViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         voiceRecordHUD.update(0.0)
-        voiceRecordHUD.fillColor = UIColor.greenColor()
+        voiceRecordHUD.fillColor = UIColor.green
         durationLabel.text = ""
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
     }
     
     // MARK: Target Action
     
-    @IBAction func finishRecord(sender: AnyObject) {
+    @IBAction func finishRecord(_ sender: AnyObject) {
         meterTimer?.invalidate()
         meterTimer = nil
         voiceRecordHUD.update(0.0)
         if audioRecorder?.currentTime > 0 {
             audioRecorder?.stop()
-            performSegueWithIdentifier("Update Recording", sender: self)
+            performSegue(withIdentifier: "Update Recording", sender: self)
         } else {
             audioRecorder = nil
-            performSegueWithIdentifier("Cancel Recording", sender: self)
+            performSegue(withIdentifier: "Cancel Recording", sender: self)
         }
         AudioSessionHelper.setupSessionActive(false)
     }
     
     // MARK: Notification
     
-    func handleInterruption(notification: NSNotification) {
+    func handleInterruption(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             let interruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as! UInt
-            if interruptionType == AVAudioSessionInterruptionType.Began.rawValue {
-                if audioRecorder?.recording == true {
+            if interruptionType == AVAudioSessionInterruptionType.began.rawValue {
+                if audioRecorder?.isRecording == true {
                     audioRecorder?.pause()
                 }
                 meterTimer?.invalidate()
                 meterTimer = nil
                 voiceRecordHUD.update(0.0)
-            } else if interruptionType == AVAudioSessionInterruptionType.Ended.rawValue {
-                let alertController = UIAlertController(title: nil, message: "Do you want to continue the recording?", preferredStyle: .Alert)
+            } else if interruptionType == AVAudioSessionInterruptionType.ended.rawValue {
+                let alertController = UIAlertController(title: nil, message: "Do you want to continue the recording?", preferredStyle: .alert)
                 
-                let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
                     self.finishRecord(self)
                 }
                 alertController.addAction(cancelAction)
                 
-                let resumeAction = UIAlertAction(title: "Resume", style: .Default) { _ in
+                let resumeAction = UIAlertAction(title: "Resume", style: .default) { _ in
                     self.delay(0.8) {
                         if let recorder = self.audioRecorder {
                             recorder.record()
                             self.updateRecorderCurrentTimeAndMeters()
-                            self.meterTimer = NSTimer.scheduledTimerWithTimeInterval(0.1,
+                            self.meterTimer = Timer.scheduledTimer(timeInterval: 0.1,
                                 target: self,
-                                selector: "updateRecorderCurrentTimeAndMeters",
+                                selector: #selector(RecordViewController.updateRecorderCurrentTimeAndMeters),
                                 userInfo: nil,
                                 repeats: true)
                             
@@ -85,16 +109,16 @@ class RecordViewController: UIViewController {
                 }
                 alertController.addAction(resumeAction)
                 
-                presentViewController(alertController, animated: true, completion: nil)
+                present(alertController, animated: true, completion: nil)
             }
         }
     }
     
     // MARK: Other
     
-    func delay(time: NSTimeInterval, block: () -> Void) {
-        let time =  dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)))
-        dispatch_after(time, dispatch_get_main_queue(), block)
+    func delay(_ time: TimeInterval, block: @escaping () -> Void) {
+        let time =  DispatchTime.now() + Double(Int64(time * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: time, execute: block)
     }
     
     func updateRecorderCurrentTimeAndMeters() {
@@ -104,7 +128,7 @@ class RecordViewController: UIViewController {
             if timeLeft > 10 {
                 durationLabel.text = "\(currentTime)″"
             } else {
-                voiceRecordHUD.fillColor = UIColor.redColor()
+                voiceRecordHUD.fillColor = UIColor.red
                 durationLabel.text = "\(timeLeft) seconds left"
                 if timeLeft == 0 {
                     durationLabel.text = "Time is up"
@@ -112,10 +136,10 @@ class RecordViewController: UIViewController {
                 }
             }
             
-            if recorder.recording {
+            if recorder.isRecording {
                 recorder.updateMeters()
                 let ALPHA = 0.05
-                let peakPower = pow(10, (ALPHA * Double(recorder.peakPowerForChannel(0))))
+                let peakPower = pow(10, (ALPHA * Double(recorder.peakPower(forChannel: 0))))
                 var rate: Double = 0.0
                 if (peakPower <= 0.2) {
                     rate = 0.2
@@ -129,39 +153,39 @@ class RecordViewController: UIViewController {
         }
     }
     
-    func configRecorderWithURL(url: NSURL, delegate: AVAudioRecorderDelegate) {
+    func configRecorderWithURL(_ url: URL, delegate: AVAudioRecorderDelegate) {
         let session:AVAudioSession = AVAudioSession.sharedInstance()
         
         session.requestRecordPermission {granted in
             if granted {
                 debugPrint("Recording permission has been granted")
                 let recordSettings: [String : AnyObject]  = [
-                    AVFormatIDKey : NSNumber(unsignedInt: kAudioFormatLinearPCM),
-                    AVSampleRateKey : 44100.0,
-                    AVNumberOfChannelsKey : 2,
-                    AVLinearPCMBitDepthKey : 16,
-                    AVLinearPCMIsBigEndianKey : false,
-                    AVLinearPCMIsFloatKey : false,
+                    AVFormatIDKey : NSNumber(value: kAudioFormatLinearPCM as UInt32),
+                    AVSampleRateKey : 44100.0 as AnyObject,
+                    AVNumberOfChannelsKey : 2 as AnyObject,
+                    AVLinearPCMBitDepthKey : 16 as AnyObject,
+                    AVLinearPCMIsBigEndianKey : false as AnyObject,
+                    AVLinearPCMIsFloatKey : false as AnyObject,
                 ]
-                self.audioRecorder = try? AVAudioRecorder(URL: url, settings: recordSettings)
+                self.audioRecorder = try? AVAudioRecorder(url: url, settings: recordSettings)
                 guard let recorder = self.audioRecorder else {
                     return
                 }
                 recorder.delegate = delegate
-                recorder.meteringEnabled = true
+                recorder.isMeteringEnabled = true
                 AudioSessionHelper.postStartAudioNotificaion(recorder)
                 self.delay(0.8) {
                     AudioSessionHelper.setupSessionActive(true, catagory: AVAudioSessionCategoryRecord)
                     if recorder.prepareToRecord() {
-                        recorder.recordForDuration(self.recordDuration)
+                        recorder.record(forDuration: self.recordDuration)
                         debugPrint("Start recording")
                         
-                        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleInterruption:", name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
+                        NotificationCenter.default.addObserver(self, selector: #selector(RecordViewController.handleInterruption(_:)), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
                         
                         self.updateRecorderCurrentTimeAndMeters()
-                        self.meterTimer = NSTimer.scheduledTimerWithTimeInterval(0.1,
+                        self.meterTimer = Timer.scheduledTimer(timeInterval: 0.1,
                             target: self,
-                            selector: "updateRecorderCurrentTimeAndMeters",
+                            selector: #selector(RecordViewController.updateRecorderCurrentTimeAndMeters),
                             userInfo: nil,
                             repeats: true)
                     }

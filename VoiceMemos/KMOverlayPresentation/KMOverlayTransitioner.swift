@@ -10,17 +10,17 @@ import UIKit
 
 class KMOverlayTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
     
-    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         
-        return KMOverlayPresentationController(presentedViewController: presented, presentingViewController: presenting)
+        return KMOverlayPresentationController(presentedViewController: presented, presenting: presenting)        
         
     }
     
-    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return KMOverlayAnimatedTransitioning(isPresentation: true)
     }
     
-    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return KMOverlayAnimatedTransitioning(isPresentation: false)
     }
     
@@ -34,57 +34,57 @@ class KMOverlayAnimatedTransitioning: NSObject, UIViewControllerAnimatedTransiti
         self.isPresentation = isPresentation
     }
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.4
     }
     
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
-        let fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)
+        let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)
         let fromView = fromViewController!.view
-        let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)
+        let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to)
         let toView = toViewController!.view
         
-        let containerView = transitionContext.containerView()
+        let containerView = transitionContext.containerView
         
         if isPresentation {
-            containerView!.addSubview(toView)
+            containerView.addSubview(toView!)
         }
         
         let animatingViewController = isPresentation ? toViewController : fromViewController
         let animatingView = animatingViewController!.view
         
-        let appearedFrame = transitionContext.finalFrameForViewController(animatingViewController!)
+        let appearedFrame = transitionContext.finalFrame(for: animatingViewController!)
         var dismissedFrame = appearedFrame
         dismissedFrame.origin.y += dismissedFrame.size.height
         
         let initialFrame = isPresentation ? dismissedFrame : appearedFrame
         let finalFrame = isPresentation ? appearedFrame : dismissedFrame
         
-        animatingView.frame = initialFrame
+        animatingView?.frame = initialFrame
         
         if isPresentation {
-            UIView.animateWithDuration(transitionDuration(transitionContext),
+            UIView.animate(withDuration: transitionDuration(using: transitionContext),
                 delay: 0.0,
                 usingSpringWithDamping: 0.6,
                 initialSpringVelocity: 1.0,
-                options: [.AllowUserInteraction, .BeginFromCurrentState],
+                options: [.allowUserInteraction, .beginFromCurrentState],
                 animations: {
-                    animatingView.frame = finalFrame
+                    animatingView?.frame = finalFrame
                 },
                 completion: { _ in
                     transitionContext.completeTransition(true)
             })
         } else {
-            UIView.animateWithDuration(transitionDuration(transitionContext),
+            UIView.animate(withDuration: transitionDuration(using: transitionContext),
                 delay: 0.0,
-                options: [.AllowUserInteraction, .BeginFromCurrentState],
+                options: [.allowUserInteraction, .beginFromCurrentState],
                 animations: {
-                    animatingView.frame = finalFrame
-                    animatingView.alpha = 0.0
+                    animatingView?.frame = finalFrame
+                    animatingView?.alpha = 0.0
                 },
                 completion: { _ in
-                    fromView.removeFromSuperview()
+                    fromView?.removeFromSuperview()
                     transitionContext.completeTransition(true)
             })
             
